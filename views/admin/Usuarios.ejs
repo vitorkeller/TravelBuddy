@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<%- include('componentes/Head') %>
+
+    <body class="bg-gray-100 min-h-screen font-[Poppins]">
+        <!-- Barra lateral -->
+        <%- include('../componentes/sidebar') %>
+
+            <!-- Conteúdo principal -->
+            <div class="ml-64">
+                <!-- Cabeçalho superior -->
+                <header class="bg-white shadow-sm">
+                    <div class="px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h1 class="text-2xl font-bold text-black">Dashboard</h1>
+                            </div>
+                            <div class="relative">
+                                <i
+                                    class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"></i>
+                                <input type="text" placeholder="Procurar..."
+                                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <main class="p-6">
+                    <!-- Tabela de Usuário -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-black">Usuários Cadastrados</h3>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button
+                                        class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-950 transition-colors">
+                                        <i class="fas fa-plus mr-2"></i>Adicionar Usuário
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            ID do Usuário</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Usuário</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">#15847</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
+                                                    class="w-8 h-8 rounded-full mr-3">
+                                                <div>
+                                                    <div class="text-sm font-medium text-black">John Doe</div>
+                                                    <div class="text-sm text-gray-500">john@example.com</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-4">
+                                                <button class="text-gray-600 hover:text-black">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-900">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">#15846</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
+                                                    class="w-8 h-8 rounded-full mr-3">
+                                                <div>
+                                                    <div class="text-sm font-medium text-black">Sarah Wilson</div>
+                                                    <div class="text-sm text-gray-500">sarah@example.com</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-4">
+                                                <button class="text-gray-600 hover:text-black">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-900">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">#15845</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
+                                                    class="w-8 h-8 rounded-full mr-3">
+                                                <div>
+                                                    <div class="text-sm font-medium text-black">Mike Johnson</div>
+                                                    <div class="text-sm text-gray-500">mike@example.com</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-4">
+                                                <button class="text-gray-600 hover:text-black">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-900">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+    </body>
+
+</html>

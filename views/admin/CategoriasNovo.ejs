@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<%- include('componentes/Head') %>
+
+    <body class="bg-gray-100 min-h-screen font-[Poppins]">
+        <!-- Barra lateral -->
+        <%- include('../componentes/sidebar') %>
+            <div class="ml-64">
+                <!-- Cabeçalho superior -->
+                <header class="bg-white shadow-sm">
+                    <div class="px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h1 class="text-2xl font-bold text-black">Dashboard</h1>
+                            </div>
+                            <div class="relative">
+                                <i
+                                    class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"></i>
+                                <input type="text" placeholder="Procurar..."
+                                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <main class="p-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                        <h2 class="text-2xl font-bold text-black mb-6 text-center">Nova Categoria</h2>
+                        <!-- Mensagem de Sucesso/Erro -->
+                        <% if (mensagem) { %>
+                            <div
+                                class="mb-4 p-3 rounded-md <%= sucesso ? 'bg-green-600' : 'bg-red-600' %> text-white text-center">
+                                <%= mensagem %>
+                            </div>
+                            <% } %>
+                                <!-- Formulário -->
+                                <form id="formCategoria" action="/admin/NovaCategoria" method="POST">
+                                    <div class="mb-4">
+                                        <label for="catNome"
+                                            class="block text-gray-700 text-sm font-medium mb-2">Nome</label>
+                                        <input type="text" id="catNome" name="catNome"
+                                            class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                            required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="catNomeNormal"
+                                            class="block text-gray-700 text-sm font-medium mb-2">Nome
+                                            Normalizado</label>
+                                        <input type="text" id="catNomeNormal" name="catNomeNormal"
+                                            class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                            required readonly>
+                                    </div>
+                                    <div class="flex justify-end space-x-3">
+                                        <a href="/admin/Categorias"
+                                            class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200">Voltar</a>
+                                        <button type="submit"
+                                            class="bg-black hover:bg-gray-950 text-white font-semibold py-2 px-4 rounded-md transition duration-200">Gravar
+                                            Nova categoria</button>
+                                    </div>
+                                </form>
+                                <% if (sucesso) { %>
+                                    <script>
+                                        setTimeout(() => {
+                                            window.location.href = '/admin/Categorias';
+                                        }, 2000);
+                                    </script>
+                                    <% } %>
+                    </div>
+                </main>
+            </div>
+            <script>
+                function normalizarTexto(texto) {
+                    return texto
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/[^a-z0-9]/g, '')
+                        .trim();
+                }
+                const inputcatNome = document.getElementById('catNome');
+                const inputcatNomeNormal = document.getElementById('catNomeNormal');
+
+                inputcatNome.addEventListener('input', () => {
+                    inputcatNomeNormal.value = normalizarTexto(inputcatNome.value);
+                });
+            </script>
+    </body>
+
+</html>
