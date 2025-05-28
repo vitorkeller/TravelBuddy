@@ -73,5 +73,5 @@ TravelBuddy/
 
 ## Criadores
 
-- [@vitorkeller](https://github.com/vitorkeller)
-- [@hub-Moraes](https://github.com/hub-Moraes)
+- [Vitor Arthur Keller](https://github.com/vitorkeller)
+- [Lucas Camilo Moraes](https://github.com/hub-Moraes)
