@@ -47,6 +47,11 @@ router.get('/Imagem', function (req, res, next) {
     res.render('Imagem', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
 });
 
+router.get('/PublicarFotografia', function (req, res, next) {
+    verificarLoginMySQL(res);
+    res.render('PublicarFotografia', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
+});
+
 router.get('/Curtidas', function (req, res, next) {
     verificarLoginMySQL(res);
     res.render('Curtidas', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });

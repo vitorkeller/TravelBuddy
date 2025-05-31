@@ -34,7 +34,7 @@ router.get('/NovaCategoria', function (req, res, next) {
     res.render('admin/CategoriasNovo', { admNome: global.admNome, mensagem: null, sucesso: false });
 });
 
-router.get('/atualizarcategoria/:id', async function (req, res, next) {
+router.get('/AtualizarCategoria/:id', async function (req, res, next) {
     verificarLoginMySQL(res);
     const catCodigo = parseInt(req.params.id);
     const categorias = await global.banco.adminBuscarCategoriaPorCodigo(catCodigo);
@@ -44,9 +44,10 @@ router.get('/atualizarcategoria/:id', async function (req, res, next) {
     res.render('admin/CategoriasAtualizar', { admNome: global.admNome, categorias, mensagem: null, sucesso: false });
 });
 
-router.get('/Usuarios', function (req, res, next) {
+router.get('/Usuarios', async function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('admin/Usuarios', { admNome: global.admNome });
+    const usuarios = await global.banco.adminBuscarUsuarios();
+    res.render('admin/Usuarios', { admNome: global.admNome, usuarios, mensagem: null, sucesso: false });
 });
 
 router.get('/Locais', function (req, res, next) {
