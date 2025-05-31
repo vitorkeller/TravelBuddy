@@ -1,154 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<%- include('componentes/Head') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/imgFavicon.png" sizes="16x16" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TravelBuddy - Perfil</title>
+</head>
 
-    <body class="bg-white text-black font-[Poppins]">
-        <%- include('componentes/header') %>
-            <main class="max-w-7xl mx-auto px-2 py-6">
-                <div class="grid gap-12 md:grid-cols-[400px_1fr] items-start">
-                    <!-- Profile Image -->
-                    <div class="flex justify-center md:justify-start">
-                        <div class="relative group w-[400px] h-[400px]">
-                            <img src="/uploads/<%= imagem %>" alt="Foto de perfil" width="300" height="300"
-                                class="rounded-full object-cover w-full h-full" />
-                            <a href="/EditarPerfil"
-                                class="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full text-lg font-semibold shadow hover:bg-black/50 gap-2">
-                                <i class="fa-solid fa-user-pen"></i>
-                                Editar perfil
+<body class="bg-white text-black font-[Poppins]">
+    <%- include('componentes/header') %>
+        <main class="max-w-7xl mx-auto px-2 py-6">
+            <div class="grid gap-12 md:grid-cols-[400px_1fr] items-start">
+                <!-- Profile Image -->
+                <div class="flex justify-center md:justify-start">
+                    <div class="relative group w-[400px] h-[400px]">
+                        <img src="/uploads/<%= imagem %>" alt="Foto de perfil" width="300" height="300"
+                            class="rounded-full object-cover w-full h-full" />
+                        <a href="/EditarPerfil"
+                            class="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full text-lg font-semibold shadow hover:bg-black/50 gap-2">
+                            <i class="fa-solid fa-user-pen"></i>
+                            Editar perfil
+                        </a>
+                    </div>
+                </div>
+                <!-- Profile Information -->
+                <div class="space-y-4">
+                    <!-- Name and Location -->
+                    <div class="space-y-2">
+                        <h2 class="text-5xl font-bold text-black uppercase">
+                            <%= nome %>
+                        </h2>
+                        <div class="flex items-center gap-2 text-gray-600">
+                            <span class="text-base">
+                                <i class="fa-solid fa-location-dot text-black"></i>
+                                <%= localizacao %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <h3 class="text-xl font-semibold text-black">Interesses</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <% if (interesses && Array.isArray(interesses)) { %>
+                                <% interesses.forEach(function(interest) { %>
+                                    <span
+                                        class="px-3 py-1 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-sm">
+                                        <%= interest %>
+                                    </span>
+                                    <% }) %>
+                                        <% } else if (interesses) { %>
+                                            <% interesses.toString().split(',').forEach(function(interest) { %>
+                                                <span
+                                                    class="px-3 py-1 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-sm">
+                                                    <%= interest.trim() %>
+                                                </span>
+                                                <% }) %>
+                                                    <% } else { %>
+                                                        <span class="text-gray-400">Nenhum interesse
+                                                            informado.</span>
+                                                        <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-user"></i>
+                            <h3 class="text-xl font-semibold text-black">Sobre mim</h3>
+                        </div>
+                        <div class="prose prose-lg max-w-none">
+                            <p class="text-gray-700 leading-relaxed">
+                                <%= descricao %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-center gap-4">
+                            <a href="/PublicarFotografia"
+                                class="px-3 py-2 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-base flex items-center gap-2">
+                                <i class="fa-solid fa-upload"></i>
+                                <span>Publicar Fotografia</span>
                             </a>
                         </div>
                     </div>
-                    <!-- Profile Information -->
-                    <div class="space-y-4">
-                        <!-- Name and Location -->
-                        <div class="space-y-2">
-                            <h2 class="text-5xl font-bold text-black uppercase">
-                                <%= nome %>
-                            </h2>
-                            <div class="flex items-center gap-2 text-gray-600">
-                                <span class="text-base">
-                                    <i class="fa-solid fa-location-dot text-black"></i>
-                                    <%= localizacao %>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-map-location-dot"></i>
-                                <h3 class="text-xl font-semibold text-black">Interesses</h3>
-                            </div>
-                            <div class="flex flex-wrap gap-3">
-                                <% if (interesses && Array.isArray(interesses)) { %>
-                                    <% interesses.forEach(function(interest) { %>
-                                        <span
-                                            class="px-3 py-1 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-sm">
-                                            <%= interest %>
-                                        </span>
-                                        <% }) %>
-                                            <% } else if (interesses) { %>
-                                                <% interesses.toString().split(',').forEach(function(interest) { %>
-                                                    <span
-                                                        class="px-3 py-1 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-sm">
-                                                        <%= interest.trim() %>
-                                                    </span>
-                                                    <% }) %>
-                                                        <% } else { %>
-                                                            <span class="text-gray-400">Nenhum interesse
-                                                                informado.</span>
-                                                            <% } %>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="mt-10">
+                <h1 class="flex justify-center text-3xl font-bold mb-8">Publicações</h1>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-10">
 
-                        <!-- Bio -->
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-user"></i>
-                                <h3 class="text-xl font-semibold text-black">Sobre mim</h3>
-                            </div>
-                            <div class="prose prose-lg max-w-none">
-                                <p class="text-gray-700 leading-relaxed">
-                                    <%= descricao %>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="space-y-4 pt-4">
-                            <div class="flex items-center gap-4">
-                                <a href=""
-                                    class="px-3 py-2 border-2 border-black text-black font-medium rounded-full hover:bg-black hover:text-white transition-colors text-base flex items-center gap-2">
-                                    <i class="fa-solid fa-upload"></i>
-                                    <span>Publicar Fotografia</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="mt-10">
-                    <h1 class="flex justify-center text-3xl font-bold mb-8">Publicações</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-10">
-                        <!-- PRIMEIRA LINHA -->
-                        <div class="flex flex-col gap-y-4">
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images001.jpg" loading="lazy" alt="Imagem 1"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images002.jpg" loading="lazy" alt="Imagem 2"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-y-4">
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images009.jpg" loading="lazy" alt="Imagem 9"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images010.jpg" loading="lazy" alt="Imagem 10"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                        </div>
-                        <!-- TERCEIRA LINHA -->
-                        <div class="flex flex-col gap-y-4">
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images017.jpg" loading="lazy" alt="Imagem 17"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images018.jpg" loading="lazy" alt="Imagem 18"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                        </div>
-                        <!-- QUARTA LINHA -->
-                        <div class="flex flex-col gap-y-4">
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images025.jpg" loading="lazy" alt="Imagem 25"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                            <div class="group relative">
-                                <a href="/Imagem">
-                                    <img src="images/imgInicial/Images026.jpg" loading="lazy" alt="Imagem 26"
-                                        class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-            <%- include('componentes/footer') %>
-    </body>
+            </div>
+        </main>
+        <%- include('componentes/footer') %>
+</body>
 
 </html>
