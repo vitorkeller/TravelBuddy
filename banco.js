@@ -138,6 +138,26 @@ async function adminAtualizarCategoria(catCodigo, catNome, catNomeNormal) {
     await conexao.query(sql, [catNome, catNomeNormal, catCodigo]);
 }
 
+async function adminBuscarUsuarios() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM usuarios ORDER BY usuCodigo;";
+    const [usuarios] = await conexao.query(sql);
+    return usuarios;
+}
+
+async function adminBuscarUsuarioPorCodigo(usuCodigo){
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM usuarios WHERE usuCodigo=?;";
+    const [usuarios] = await conexao.query(sql, [usuCodigo]);
+    return usuarios[0] || null;
+}
+
+async function adminExcluirUsuario(usuCodigo) {
+    const conexao = await conectarBD();
+    const sql = "DELETE FROM usuarios WHERE usuCodigo=?;";
+    await conexao.query(sql, [usuCodigo]);
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario };

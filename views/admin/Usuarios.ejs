@@ -45,15 +45,24 @@
                             <div>
                                 <h3 class="text-lg font-semibold text-black">Usuários Cadastrados</h3>
                             </div>
+                            <div class="flex space-x-3 items-center">
+                                <% if (mensagem) { %>
+                                    <div
+                                        class="px-4 py-2 rounded-md <%= sucesso ? 'bg-green-600' : 'bg-red-600' %> text-white">
+                                        <%= mensagem %>
+                                    </div>
+                                    <% } %>
+                            </div>
                             <div class="flex space-x-3">
-                                <button
-                                    class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-950 transition-colors">
-                                    <i class="fas fa-plus mr-2"></i>Adicionar Usuário
-                                </button>
+                                <a href="/admin/NovoUsuario">
+                                    <button
+                                        class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-950 transition-colors">
+                                        <i class="fas fa-plus mr-2"></i>Adicionar Usuário
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
-
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead class="bg-gray-50">
@@ -63,95 +72,63 @@
                                         ID do Usuário</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Usuário</th>
+                                        Nome do Usuário</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        E-mail do Usuário</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Ações</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="text-sm font-medium text-black">#15847</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
-                                                class="w-8 h-8 rounded-full mr-3">
-                                            <div>
-                                                <div class="text-sm font-medium text-black">John Doe</div>
-                                                <div class="text-sm text-gray-500">john@example.com</div>
+                                <% usuarios.forEach(usuarios=> { %>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= usuarios.usuCodigo %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div>
+                                                    <div class="text-sm font-medium text-black">
+                                                        <%= usuarios.usuNome %>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex space-x-4">
-                                            <button class="text-gray-600 hover:text-black">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="text-red-600 hover:text-red-900">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="text-sm font-medium text-black">#15846</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
-                                                class="w-8 h-8 rounded-full mr-3">
-                                            <div>
-                                                <div class="text-sm font-medium text-black">Sarah Wilson</div>
-                                                <div class="text-sm text-gray-500">sarah@example.com</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div>
+                                                    <div class="text-sm font-medium text-black">
+                                                        <%= usuarios.usuEmail %>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex space-x-4">
-                                            <button class="text-gray-600 hover:text-black">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="text-red-600 hover:text-red-900">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="text-sm font-medium text-black">#15845</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <img src="/uploads/imgPerfilPadrão.png" alt="Cliente"
-                                                class="w-8 h-8 rounded-full mr-3">
-                                            <div>
-                                                <div class="text-sm font-medium text-black">Mike Johnson</div>
-                                                <div class="text-sm text-gray-500">mike@example.com</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-4">
+                                                <button class="text-gray-600 hover:text-black">
+                                                    <a href="/admin/AtualizarUsuario/<%= usuarios.usuCodigo %>">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </button>
+                                                <button class="text-red-500 hover:text-red-800">
+                                                    <a href="/admin/ExcluirUsuario/<%= usuarios.usuCodigo %>">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </button>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex space-x-4">
-                                            <button class="text-gray-600 hover:text-black">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="text-red-600 hover:text-red-900">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </main>
         </div>
-
 </body>
 
 </html>

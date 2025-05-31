@@ -50,6 +50,17 @@ router.get('/Usuarios', async function (req, res, next) {
     res.render('admin/Usuarios', { admNome: global.admNome, usuarios, mensagem: null, sucesso: false });
 });
 
+router.get('/ExcluirUsuario/:id', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const usuCodigo = req.params.id;
+    const usuario = await global.banco.adminBuscarUsuarioPorCodigo(usuCodigo);
+    if (!usuario) {
+        return res.render('admin/Usuarios', { admNome: global.admNome, usuarios: await global.banco.adminBuscarUsuarios(), mensagem: 'Usuário não encontrado.', sucesso: false });
+    }
+    await global.banco.adminExcluirUsuario(usuCodigo);
+    return res.render('admin/Usuarios', { admNome: global.admNome, usuarios: await global.banco.adminBuscarUsuarios(), mensagem: "Usuário excluído com sucesso.", sucesso: true });
+});
+
 router.get('/Locais', function (req, res, next) {
     verificarLoginMySQL(res);
     res.render('admin/Locais', { admNome: global.admNome });
