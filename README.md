@@ -43,7 +43,7 @@ TravelBuddy/
 
 1. **Clone o repositório:**
    ```sh
-   git clone https://github.com/seu-usuario/travelbuddy.git
+   git clone https://github.com/vitorkeller/travelbuddy.git
    cd travelbuddy
    ```
    
@@ -55,6 +55,7 @@ TravelBuddy/
 3. **Importando o banco de dados**
     - O script para criar as tabelas e dados iniciais está em `database/travelbuddy.sql`.
     - Para importar no MySQL, use:
+    
     ```sh
     mysql -u root -p travelbuddy < database/travelbuddy.sql
     ```
