@@ -16,17 +16,13 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen font-[Poppins]">
-    <!-- Barra lateral -->
     <%- include('../componentes/sidebar') %>
-
-        <!-- Conteúdo principal -->
         <div class="ml-64">
-            <!-- Cabeçalho superior -->
             <header class="bg-white shadow-sm">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h1 class="text-2xl font-bold text-black">Dashboard</h1>
+                            <h1 class="text-2xl font-bold text-black"> Dashboard </h1>
                         </div>
                         <div class="relative">
                             <i
@@ -38,12 +34,11 @@
                 </div>
             </header>
             <main class="p-6">
-                <!-- Tabela de Usuário -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-semibold text-black">Usuários Cadastrados</h3>
+                                <h3 class="text-lg font-semibold text-black"> Usuários Cadastrados </h3>
                             </div>
                             <div class="flex space-x-3 items-center">
                                 <% if (mensagem) { %>
@@ -57,7 +52,7 @@
                                 <a href="/admin/NovoUsuario">
                                     <button
                                         class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-950 transition-colors">
-                                        <i class="fas fa-plus mr-2"></i>Adicionar Usuário
+                                        <i class="fas fa-plus mr-2"></i> Adicionar Usuário
                                     </button>
                                 </a>
                             </div>
@@ -69,16 +64,16 @@
                                 <tr>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        ID do Usuário</th>
+                                        ID do Usuário </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nome do Usuário</th>
+                                        Nome do Usuário </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        E-mail do Usuário</th>
+                                        E-mail do Usuário </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Ações</th>
+                                        Ações </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">

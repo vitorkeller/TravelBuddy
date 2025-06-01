@@ -61,6 +61,11 @@ router.get('/ExcluirUsuario/:id', async function (req, res, next) {
     return res.render('admin/Usuarios', { admNome: global.admNome, usuarios: await global.banco.adminBuscarUsuarios(), mensagem: "Usuário excluído com sucesso.", sucesso: true });
 });
 
+router.get('/NovoUsuario', function (req, res, next) {
+    verificarLoginMySQL(res);
+    res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: null, sucesso: false });
+});
+
 router.get('/Locais', function (req, res, next) {
     verificarLoginMySQL(res);
     res.render('admin/Locais', { admNome: global.admNome });
@@ -120,6 +125,20 @@ router.post('/AtualizarCategoria/:id', async function (req, res, next) {
     }
     await global.banco.adminAtualizarCategoria(catCodigo, catNome, catNomeNormal);
     return res.render('admin/CategoriasAtualizar', { admNome: global.admNome, categorias: { catCodigo, catNome, catNomeNormal }, mensagem: "Categoria atualizada com sucesso.", sucesso: true });
+});
+
+router.post('/NovoUsuario', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const { usuNome, usuEmail, usuSenha } = req.body;
+    if (!usuNome || !usuEmail || !usuSenha) {
+        return res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: "Preencha todos os campos!", sucesso: false });
+    }
+    const usuarioJaExiste = await global.banco.adminBuscarUsuarioPorEmail(usuEmail);
+    if (usuarioJaExiste) {
+        return res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: "Esse usuário já existe!", sucesso: false });
+    }
+    await global.banco.adminInserirUsuario(usuNome, usuEmail, usuSenha);
+    return res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: "Usuário cadastrado com sucesso!", sucesso: true });
 });
 
 /* FUNCTIONS */

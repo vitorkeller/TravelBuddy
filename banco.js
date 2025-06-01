@@ -145,7 +145,7 @@ async function adminBuscarUsuarios() {
     return usuarios;
 }
 
-async function adminBuscarUsuarioPorCodigo(usuCodigo){
+async function adminBuscarUsuarioPorCodigo(usuCodigo) {
     const conexao = await conectarBD();
     const sql = "SELECT * FROM usuarios WHERE usuCodigo=?;";
     const [usuarios] = await conexao.query(sql, [usuCodigo]);
@@ -158,6 +158,19 @@ async function adminExcluirUsuario(usuCodigo) {
     await conexao.query(sql, [usuCodigo]);
 }
 
+async function adminBuscarUsuarioPorEmail(usuEmail) {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM usuarios WHERE usuEmail=?;";
+    const [usuarios] = await conexao.query(sql, [usuEmail]);
+    return usuarios && usuarios.length > 0 ? usuarios[0] : null;
+}
+
+async function adminInserirUsuario(usuNome, usuEmail, usuSenha) {
+    const coexao = await conectarBD();
+    const sql = "INSERT INTO usuarios (usuNome, usuEmail, usuSenha) VALUES (?, ?, ?);";
+    await coexao.query(sql, [usuNome, usuEmail, usuSenha]);
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario };
