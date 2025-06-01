@@ -66,6 +66,16 @@ router.get('/NovoUsuario', function (req, res, next) {
     res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: null, sucesso: false });
 });
 
+router.get('/AtualizarUsuario/:id', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const usuCodigo = parseInt(req.params.id);
+    const usuario = await global.banco.adminBuscarUsuarioPorCodigo(usuCodigo);
+    if (!usuario) {
+        return res.render('admin/UsuarioAtualizar', { admNome: global.admNome, mensagem: 'Usuário não encontrado.', sucesso: false });
+    }
+    res.render('admin/UsuarioAtualizar', { admNome: global.admNome, usuario, mensagem: null, sucesso: false });
+});
+
 router.get('/Locais', function (req, res, next) {
     verificarLoginMySQL(res);
     res.render('admin/Locais', { admNome: global.admNome });
@@ -139,6 +149,17 @@ router.post('/NovoUsuario', async function (req, res, next) {
     }
     await global.banco.adminInserirUsuario(usuNome, usuEmail, usuSenha);
     return res.render('admin/UsuarioNovo', { admNome: global.admNome, mensagem: "Usuário cadastrado com sucesso!", sucesso: true });
+});
+
+router.post('/AtualizarUsuario/:id', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const usuCodigo = req.params.id;
+    const { usuNome, usuEmail, usuSenha } = req.body;
+    if (!usuNome || !usuEmail || !usuSenha) {
+        return res.render('admin/UsuarioAtualizar', { admNome: global.admNome, usuario: { usuCodigo, usuNome, usuEmail, usuSenha }, mensagem: "Preencha todos os campos!", sucesso: false });
+    }
+    await global.banco.adminAtualizarUsuario(usuCodigo, usuNome, usuEmail, usuSenha);
+    return res.render('admin/UsuarioAtualizar', { admNome: global.admNome, usuario: { usuCodigo, usuNome, usuEmail, usuSenha }, mensagem: "Usuário atualizado com sucesso.", sucesso: true });
 });
 
 /* FUNCTIONS */

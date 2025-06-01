@@ -171,6 +171,12 @@ async function adminInserirUsuario(usuNome, usuEmail, usuSenha) {
     await coexao.query(sql, [usuNome, usuEmail, usuSenha]);
 }
 
+async function adminAtualizarUsuario(usuCodigo, usuNome, usuEmail, usuSenha) {
+    const conexao = await conectarBD();
+    const sql = "UPDATE usuarios SET usuNome=?, usuEmail=?, usuSenha=? WHERE usuCodigo=?;";
+    await conexao.query(sql, [usuNome, usuEmail, usuSenha, usuCodigo]);
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario };
