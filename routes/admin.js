@@ -81,9 +81,9 @@ router.get('/Locais', function (req, res, next) {
     res.render('admin/Locais', { admNome: global.admNome });
 });
 
-router.get('/Configuracoes', function (req, res, next) {
+router.get('/Publicacoes', function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('admin/Configuracoes', { admNome: global.admNome });
+    res.render('admin/Publicacoes', { admNome: global.admNome });
 });
 
 router.get('/Sair', function (req, res, next) {
