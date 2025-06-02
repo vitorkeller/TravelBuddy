@@ -146,7 +146,7 @@ async function buscarPublicacaoPorId(pubCodigo) {
 
 async function adminBuscarCategorias() {
     const conexao = await conectarBD();
-    const sql = "SELECT * FROM categorias ORDER BY catCodigo;";
+    const sql = "SELECT c.*, (SELECT COUNT(*) FROM publicacaoCategorias pc WHERE pc.catCodigo = c.catCodigo) AS catQuantidadeImagens FROM categorias c ORDER BY c.catCodigo;";
     const [categorias] = await conexao.query(sql);
     return categorias;
 }
