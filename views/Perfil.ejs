@@ -19,21 +19,17 @@
     <%- include('componentes/header') %>
         <main class="max-w-7xl mx-auto px-2 py-6">
             <div class="grid gap-12 md:grid-cols-[400px_1fr] items-start">
-                <!-- Profile Image -->
                 <div class="flex justify-center md:justify-start">
                     <div class="relative group w-[400px] h-[400px]">
                         <img src="/uploads/Perfil/<%= imagem %>" alt="Foto de perfil" width="300" height="300"
                             class="rounded-full object-cover w-full h-full" />
                         <a href="/EditarPerfil"
                             class="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full text-lg font-semibold shadow hover:bg-black/50 gap-2">
-                            <i class="fa-solid fa-user-pen"></i>
-                            Editar perfil
+                            <i class="fa-solid fa-user-pen"></i>Editar perfil
                         </a>
                     </div>
                 </div>
-                <!-- Profile Information -->
                 <div class="space-y-4">
-                    <!-- Name and Location -->
                     <div class="space-y-2">
                         <h2 class="text-5xl font-bold text-black uppercase">
                             <%= nome %>
@@ -66,8 +62,7 @@
                                                 </span>
                                                 <% }) %>
                                                     <% } else { %>
-                                                        <span class="text-gray-400">Nenhum interesse
-                                                            informado.</span>
+                                                        <span class="text-gray-400">Nenhum interesse informado.</span>
                                                         <% } %>
                         </div>
                     </div>
@@ -95,10 +90,9 @@
             </div>
             <section class="mt-12">
                 <div class="mx-auto max-w-7xl py-6 px-2">
-                    <h1 class="flex justify-center text-3xl font-bold mb-8"> Minhas Publicações </h1>
+                    <h1 class="flex justify-center text-3xl font-bold mb-8">Minhas Publicações</h1>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-10">
                         <% if (publicacao && publicacao.length> 0) {
-                            // Divide as publicações em 4 colunas
                             let colunas = [[], [], [], []];
                             publicacao.forEach(function(pub, idx) {
                             colunas[idx % 4].push(pub);
@@ -118,8 +112,8 @@
                                 </div>
                                 <% }); %>
                                     <% } else { %>
-                                        <div class="col-span-4 text-center text-gray-600 py-10"> Nenhuma publicação
-                                            encontrada. </div>
+                                        <div class="col-span-4 text-center text-gray-600 py-10">Nenhuma publicação
+                                            encontrada.</div>
                                         <% } %>
                     </div>
                 </div>
