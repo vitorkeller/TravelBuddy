@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/imgFavicon.png" sizes="16x16" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TravelBuddy - Publicações</title>
+</head>
+
+<body class="bg-gray-100 min-h-screen font-[Poppins]">
+    <%- include('../componentes/sidebar') %>
+        <div class="ml-64">
+            <header class="bg-white shadow-sm">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-black"> Dashboard </h1>
+                        </div>
+                        <div class="relative">
+                            <i
+                                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"></i>
+                            <input type="text" placeholder="Procurar..."
+                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none">
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main class="p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-black"> Publicações </h3>
+                            </div>
+                            <div class="flex space-x-3 items-center">
+                                <% if (mensagem) { %>
+                                    <div
+                                        class="px-4 py-2 rounded-md <%= sucesso ? 'bg-green-600' : 'bg-red-600' %> text-white">
+                                        <%= mensagem %>
+                                    </div>
+                                    <% } %>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        ID da Publicação </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Título </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Descrição </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Data </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Foto </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        País </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Id do Usuário </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Ações </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% publicacoes.forEach(publicacoes=> { %>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.pubCodigo %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.pubTitulo %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 max-w-xs break-words whitespace-normal">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.pubDescricao %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= new Date(publicacoes.pubData).toISOString().slice(0, 10) %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.pubFoto %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.paisCodigo %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.usuCodigo %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex space-x-4">
+                                                <button class="text-gray-600 hover:text-black">
+                                                    <a href="/admin/AtualizarPublicacao/<%= publicacoes.pubCodigo %>">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </button>
+                                                <button class="text-red-500 hover:text-red-800">
+                                                    <a href="/admin//ExcluirPublicacao/<%= publicacoes.pubCodigo %>">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+</body>
+
+</html>

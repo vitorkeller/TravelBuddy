@@ -76,14 +76,37 @@ router.get('/AtualizarUsuario/:id', async function (req, res, next) {
     res.render('admin/UsuarioAtualizar', { admNome: global.admNome, usuario, mensagem: null, sucesso: false });
 });
 
-router.get('/Locais', function (req, res, next) {
+router.get('/Locais', async function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('admin/Locais', { admNome: global.admNome });
+    const paises = await global.banco.adminBuscarPaises();
+    res.render('admin/Locais', { admNome: global.admNome, paises });
 });
 
-router.get('/Publicacoes', function (req, res, next) {
+router.get('/Publicacoes', async function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('admin/Publicacoes', { admNome: global.admNome });
+    const publicacoes = await global.banco.adminBuscarPublicacoes();
+    res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes, mensagem: null, sucesso: false });
+});
+
+router.get('/ExcluirPublicacao/:id', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const pubCodigo = req.params.id;
+    const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
+    if (!publicacao) {
+        return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: 'Publicação não encontrada.', sucesso: false });
+    }
+    await global.banco.adminExcluirPublicacao(pubCodigo);
+    return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: "Publicação excluída com sucesso.", sucesso: true });
+});
+
+router.get('/AtualizarPublicacao/:id', async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const pubCodigo = parseInt(req.params.id);
+    const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
+    if (!publicacao) {
+        return res.render('admin/Publicacoes', { admNome: global.admNome, mensagem: 'Publicação não encontrada.', sucesso: false });
+    }
+    res.render('admin/PublicacoesAtualizar', { admNome: global.admNome, publicacao, mensagem: null, sucesso: false });
 });
 
 router.get('/Sair', function (req, res, next) {

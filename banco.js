@@ -177,6 +177,33 @@ async function adminAtualizarUsuario(usuCodigo, usuNome, usuEmail, usuSenha) {
     await conexao.query(sql, [usuNome, usuEmail, usuSenha, usuCodigo]);
 }
 
+async function adminBuscarPublicacoes() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM publicacao ORDER BY pubCodigo;";
+    const [publicacoes] = await conexao.query(sql);
+    return publicacoes;
+}
+
+async function adminBuscarPublicacaoPorCodigo(pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM publicacao WHERE pubCodigo=?;";
+    const [publicacoes] = await conexao.query(sql, [pubCodigo]);
+    return publicacoes && publicacoes.length > 0 ? publicacoes[0] : null;
+}
+
+async function adminExcluirPublicacao(pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = "DELETE FROM publicacao WHERE pubCodigo=?;";
+    await conexao.query(sql, [pubCodigo]);
+}
+
+async function adminBuscarPaises() {
+    const conexao = await conectarBD();
+    const sql = "SELECT pais.paisNome, COUNT(publicacao.pubCodigo) AS quantidadePostagens FROM pais INNER JOIN publicacao ON publicacao.paisCodigo = pais.paisCodigo GROUP BY pais.paisCodigo, pais.paisNome ORDER BY quantidadePostagens DESC, pais.paisNome ASC;";
+    const [paises] = await conexao.query(sql);
+    return paises;
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPaises };
