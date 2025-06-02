@@ -42,17 +42,19 @@
                             <%= mensagem %>
                         </div>
                         <% } %>
-                            <form id="formUsuario" action="/admin/AtualizarUsuario/<%= publicacao.pubCodigo %>"
-                                method="POST">
+                            <form id="formPublicacao" action="/admin/AtualizarPublicacao/<%= publicacao.pubCodigo %>"
+                                method="POST" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="pubTitulo" class="block text-gray-700 text-sm font-medium mb-2"> Título
                                     </label>
-                                    <input type="text" id="pubTitulo" name="pubTitulo" value="<%= publicacao.pubTitulo %>"
+                                    <input type="text" id="pubTitulo" name="pubTitulo"
+                                        value="<%= publicacao.pubTitulo %>"
                                         class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                                         required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="pubDescricao" class="block text-gray-700 text-sm font-medium mb-2"> Descrição
+                                    <label for="pubDescricao" class="block text-gray-700 text-sm font-medium mb-2">
+                                        Descrição
                                     </label>
                                     <input type="text" id="pubDescricao" name="pubDescricao"
                                         value="<%= publicacao.pubDescricao %>"
@@ -60,25 +62,84 @@
                                         required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="pubFoto" class="block text-gray-700 text-sm font-medium mb-2"> Foto
-                                    </label>
-                                    <input type="text" id="pubFoto" name="pubFoto" value="<%= publicacao.pubFoto %>"
-                                        class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                                        required>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2"> Foto Atual </label>
+                                    <img src="/uploads/Publicações/<%= publicacao.pubFoto %>" alt="Foto da publicação"
+                                        class="mb-2 max-h-40 rounded">
+                                    <label for="pubFoto" class="block text-gray-700 text-sm font-medium mb-2"> Nova
+                                        Foto (opcional) </label>
+                                    <input type="file" id="pubFoto" name="pubFoto"
+                                        class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                    <input type="hidden" name="pubFotoAntiga" value="<%= publicacao.pubFoto %>">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-medium mb-2"> Categorias * </label>
+                                    <details
+                                        class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
+                                        <summary
+                                            class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden cursor-pointer">
+                                            <span class="text-sm font-medium text-black"> Selecione até 3 categorias
+                                            </span>
+                                            <span class="transition-transform group-open:-rotate-180">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                </svg>
+                                            </span>
+                                        </summary>
+                                        <div
+                                            class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
+                                            <div class="flex items-center justify-between px-2 py-2">
+                                                <span id="selected-count" class="text-sm text-gray-700"> 0 Selecionadas
+                                                </span>
+                                                <button id="clear-all" type="button"
+                                                    class="text-xs text-black hover:underline ml-2"> Limpar Tudo
+                                                </button>
+                                            </div>
+                                            <fieldset class="p-3">
+                                                <legend class="sr-only"> Checkboxes </legend>
+                                                <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
+                                                    <% let selectedCats = []; if (publicacao.categorias) { selectedCats = publicacao.categorias; } %>
+                                                    <% categorias.forEach(function(categoria, idx) { %>
+                                                        <label for="catOption<%= idx %>" class="inline-flex items-center gap-3">
+                                                            <input type="checkbox" name="categorias"
+                                                                value="<%= categoria.catCodigo %>"
+                                                                class="size-5 rounded border-gray-300 shadow-sm category-checkbox"
+                                                                id="catOption<%= idx %>"
+                                                                <%= selectedCats.includes(categoria.catCodigo) ? 'checked' : '' %>
+                                                            />
+                                                            <span class="text-sm font-medium text-black">
+                                                                <%= categoria.catNome %>
+                                                            </span>
+                                                        </label>
+                                                        <% }) %>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </details>
+                                    <small class="text-gray-500"> Selecione até 3 categorias. </small>
                                 </div>
                                 <div class="mb-4">
                                     <label for="paisCodigo" class="block text-gray-700 text-sm font-medium mb-2"> País
                                     </label>
-                                    <input type="text" id="paisCodigo" name="paisCodigo" value="<%= publicacao.paisCodigo %>"
+                                    <select id="paisCodigo" name="paisCodigo"
                                         class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                                         required>
+                                        <% paises.forEach(function(pais) { %>
+                                            <option value="<%= pais.paisCodigo %>"
+                                                <%=publicacao.paisCodigo==pais.paisCodigo ? 'selected' : '' %>>
+                                                <%= pais.paisNome %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
                                 </div>
                                 <div class="flex justify-end space-x-3">
                                     <a href="/admin/Publicacoes"
-                                        class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200">Voltar</a>
+                                        class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200">
+                                        Voltar </a>
                                     <button type="submit"
-                                        class="bg-black hover:bg-gray-950 text-white font-semibold py-2 px-4 rounded-md transition duration-200">Gravar
-                                        Atualizações</button>
+                                        class="bg-black hover:bg-gray-950 text-white font-semibold py-2 px-4 rounded-md transition duration-200">
+                                        Gravar Atualizações </button>
                                 </div>
                             </form>
                             <% if (sucesso) { %>
@@ -91,6 +152,32 @@
                 </div>
             </main>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const checkboxes = document.querySelectorAll('.category-checkbox');
+                const selectedCount = document.getElementById('selected-count');
+                const clearAllBtn = document.getElementById('clear-all');
+
+                function updateCount() {
+                    const checked = document.querySelectorAll('.category-checkbox:checked').length;
+                    selectedCount.textContent = checked + ' Selecionadas';
+                }
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', function () {
+                        const checked = document.querySelectorAll('.category-checkbox:checked');
+                        if (checked.length > 3) {
+                            this.checked = false;
+                        }
+                        updateCount();
+                    });
+                });
+                clearAllBtn.addEventListener('click', function () {
+                    checkboxes.forEach(cb => cb.checked = false);
+                    updateCount();
+                });
+                updateCount();
+            });
+        </script>
 </body>
 
 </html>

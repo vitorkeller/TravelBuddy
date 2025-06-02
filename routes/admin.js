@@ -1,5 +1,18 @@
 var express = require('express');
 var router = express.Router();
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/Publicações');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 
 /* GET Pages. */
 router.get('/', function (req, res, next) {
@@ -101,12 +114,14 @@ router.get('/ExcluirPublicacao/:id', async function (req, res, next) {
 
 router.get('/AtualizarPublicacao/:id', async function (req, res, next) {
     verificarLoginMySQL(res);
-    const pubCodigo = parseInt(req.params.id);
+    const pubCodigo = req.params.id;
     const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
+    const categorias = await global.banco.adminBuscarCategorias();
+    const paises = await global.banco.buscarPaises();
     if (!publicacao) {
-        return res.render('admin/Publicacoes', { admNome: global.admNome, mensagem: 'Publicação não encontrada.', sucesso: false });
+        return res.render('admin/Publicacoes', { mensagem: 'Publicação não encontrada.', sucesso: false });
     }
-    res.render('admin/PublicacoesAtualizar', { admNome: global.admNome, publicacao, mensagem: null, sucesso: false });
+    res.render('admin/PublicacoesAtualizar', { publicacao, categorias, paises, mensagem: null, sucesso: false });
 });
 
 router.get('/Sair', function (req, res, next) {
@@ -183,6 +198,36 @@ router.post('/AtualizarUsuario/:id', async function (req, res, next) {
     }
     await global.banco.adminAtualizarUsuario(usuCodigo, usuNome, usuEmail, usuSenha);
     return res.render('admin/UsuarioAtualizar', { admNome: global.admNome, usuario: { usuCodigo, usuNome, usuEmail, usuSenha }, mensagem: "Usuário atualizado com sucesso.", sucesso: true });
+});
+
+router.post('/AtualizarPublicacao/:id', upload.single('pubFoto'), async function (req, res, next) {
+    verificarLoginMySQL(res);
+    const pubCodigo = req.params.id;
+    const { pubTitulo, pubDescricao, paisCodigo } = req.body;
+    let categorias = req.body.categorias;
+    let pubFoto = req.body.pubFotoAntiga;
+    if (req.file && req.file.filename) {
+        pubFoto = req.file.filename;
+    }
+    if (!pubTitulo || !pubDescricao || !paisCodigo || !categorias) {
+        const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
+        const todasCategorias = await global.banco.adminBuscarCategorias();
+        const paises = await global.banco.buscarPaises();
+        return res.render('admin/PublicacoesAtualizar', {
+            publicacao, categorias: todasCategorias, paises,
+            mensagem: "Preencha todos os campos!", sucesso: false
+        });
+    }
+
+    await global.banco.adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubFoto, paisCodigo, categorias);
+
+    const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
+    const todasCategorias = await global.banco.adminBuscarCategorias();
+    const paises = await global.banco.buscarPaises();
+    res.render('admin/PublicacoesAtualizar', {
+        publicacao, categorias: todasCategorias, paises,
+        mensagem: "Publicação atualizada com sucesso.", sucesso: true
+    });
 });
 
 /* FUNCTIONS */

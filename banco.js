@@ -92,13 +92,6 @@ async function atualizarPerfil(usuCodigo, dados) {
     await conexao.query(sqlPerfil, [dados.localizacao, dados.interesses, dados.descricao, usuCodigo]);
 }
 
-async function buscarAdmin(admin) {
-    const conexao = await conectarBD();
-    const sql = "SELECT * FROM admins WHERE admEmail=? AND admSenha=?;";
-    const [adminEncontrado] = await conexao.query(sql, [admin.email, admin.senha]);
-    return adminEncontrado && adminEncontrado.length > 0 ? adminEncontrado[0] : {};
-}
-
 async function buscarCategorias() {
     const conexao = await conectarBD();
     const sql = "SELECT * FROM categorias ORDER BY catCodigo;";
@@ -142,6 +135,13 @@ async function buscarPublicacaoPorId(pubCodigo) {
     const [categorias] = await conexao.query(sqlCategorias, [pubCodigo]);
     publicacoes[0].categorias = categorias;
     return publicacoes[0];
+}
+
+async function buscarAdmin(admin) {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM admins WHERE admEmail=? AND admSenha=?;";
+    const [adminEncontrado] = await conexao.query(sql, [admin.email, admin.senha]);
+    return adminEncontrado && adminEncontrado.length > 0 ? adminEncontrado[0] : {};
 }
 
 async function adminBuscarCategorias() {
@@ -224,22 +224,33 @@ async function adminAtualizarUsuario(usuCodigo, usuNome, usuEmail, usuSenha) {
 
 async function adminBuscarPublicacoes() {
     const conexao = await conectarBD();
-    const sql = "SELECT * FROM publicacao ORDER BY pubCodigo;";
+    const sql = "SELECT p.*, pa.paisNome, u.usuNome, GROUP_CONCAT(c.catNome SEPARATOR ', ') AS categorias FROM publicacao p INNER JOIN pais pa ON pa.paisCodigo = p.paisCodigo INNER JOIN usuarios u ON u.usuCodigo = p.usuCodigo LEFT JOIN publicacaocategorias pc ON pc.pubCodigo = p.pubCodigo LEFT JOIN categorias c ON c.catCodigo = pc.catCodigo GROUP BY p.pubCodigo ORDER BY pubCodigo;";
     const [publicacoes] = await conexao.query(sql);
     return publicacoes;
 }
 
 async function adminBuscarPublicacaoPorCodigo(pubCodigo) {
     const conexao = await conectarBD();
-    const sql = "SELECT * FROM publicacao WHERE pubCodigo=?;";
+    const sql = " SELECT p.*, pa.paisNome, u.usuNome FROM publicacao p INNER JOIN pais pa ON pa.paisCodigo = p.paisCodigo INNER JOIN usuarios u ON u.usuCodigo = p.usuCodigo WHERE p.pubCodigo = ?;";
     const [publicacoes] = await conexao.query(sql, [pubCodigo]);
-    return publicacoes && publicacoes.length > 0 ? publicacoes[0] : null;
+    if (!publicacoes || publicacoes.length === 0) return null;
+    const sqlCats = " SELECT c.catCodigo FROM publicacaocategorias pc INNER JOIN categorias c ON c.catCodigo = pc.catCodigo WHERE pc.pubCodigo = ?;";
+    const [cats] = await conexao.query(sqlCats, [pubCodigo]);
+    publicacoes[0].categorias = cats.map(c => c.catCodigo);
+    return publicacoes[0];
 }
 
 async function adminExcluirPublicacao(pubCodigo) {
     const conexao = await conectarBD();
     const sql = "DELETE FROM publicacao WHERE pubCodigo=?;";
     await conexao.query(sql, [pubCodigo]);
+}
+
+async function adminBuscarPais() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM pais ORDER BY paisCodigo;";
+    const [paises] = await conexao.query(sql);
+    return paises;
 }
 
 async function adminBuscarPaises() {
@@ -249,6 +260,25 @@ async function adminBuscarPaises() {
     return paises;
 }
 
+async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubFoto, paisCodigo, categorias) {
+    const conexao = await conectarBD();
+    const sql = "UPDATE publicacao SET pubTitulo=?, pubDescricao=?, pubFoto=?, paisCodigo=? WHERE pubCodigo=?";
+    await conexao.query(sql, [pubTitulo, pubDescricao, pubFoto, paisCodigo, pubCodigo]);
+
+    const sqlDel = "DELETE FROM publicacaocategorias WHERE pubCodigo=?";
+    await conexao.query(sqlDel, [pubCodigo]);
+
+    if (categorias && categorias.length > 0) {
+        const categoriasArr = Array.isArray(categorias) ? categorias : [categorias];
+        for (const catCodigo of categoriasArr) {
+            await conexao.query(
+                "INSERT INTO publicacaocategorias (pubCodigo, catCodigo) VALUES (?, ?)",
+                [pubCodigo, catCodigo]
+            );
+        }
+    }
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPaises };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };

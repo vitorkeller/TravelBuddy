@@ -60,23 +60,23 @@
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         ID da Publicação </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
                                         Título </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
                                         Descrição </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Data </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Foto </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Categorias </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         País </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Id do Usuário </th>
+                                        Nome do Usuário </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Ações </th>
@@ -90,19 +90,14 @@
                                                 <%= publicacoes.pubCodigo %>
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-normal break-words w-1/4">
                                             <span class="text-sm font-medium text-black">
                                                 <%= publicacoes.pubTitulo %>
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 max-w-xs break-words whitespace-normal">
+                                        <td class="px-6 py-4 max-w-xs whitespace-normal break-words w-1/3">
                                             <span class="text-sm font-medium text-black">
                                                 <%= publicacoes.pubDescricao %>
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="text-sm font-medium text-black">
-                                                <%= new Date(publicacoes.pubData).toISOString().slice(0, 10) %>
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -110,14 +105,19 @@
                                                 <%= publicacoes.pubFoto %>
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-normal">
                                             <span class="text-sm font-medium text-black">
-                                                <%= publicacoes.paisCodigo %>
+                                                <%= publicacoes.categorias || '-' %>
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="text-sm font-medium text-black">
-                                                <%= publicacoes.usuCodigo %>
+                                                <%= publicacoes.paisNome %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-black">
+                                                <%= publicacoes.usuNome %>
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
