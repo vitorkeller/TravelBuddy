@@ -137,7 +137,11 @@ async function buscarPublicacaoPorId(pubCodigo) {
     const conexao = await conectarBD();
     const sql = " SELECT p.*, u.usuNome, pa.paisNome FROM publicacao p INNER JOIN usuarios u ON u.usuCodigo = p.usuCodigo INNER JOIN pais pa ON pa.paisCodigo = p.paisCodigo WHERE p.pubCodigo = ?;";
     const [publicacoes] = await conexao.query(sql, [pubCodigo]);
-    return publicacoes && publicacoes.length > 0 ? publicacoes[0] : null;
+    if (!publicacoes || publicacoes.length === 0) return null;
+    const sqlCategorias = " SELECT c.catCodigo, c.catNome FROM publicacaoCategorias pc INNER JOIN categorias c ON c.catCodigo = pc.catCodigo WHERE pc.pubCodigo = ?;";
+    const [categorias] = await conexao.query(sqlCategorias, [pubCodigo]);
+    publicacoes[0].categorias = categorias;
+    return publicacoes[0];
 }
 
 async function adminBuscarCategorias() {

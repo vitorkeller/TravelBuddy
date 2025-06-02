@@ -4,9 +4,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const storage = multer.diskStorage({
+const storagePerfil = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads');
+        cb(null, 'public/Uploads/Perfil');
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
@@ -14,7 +14,20 @@ const storage = multer.diskStorage({
         cb(null, nomeArquivo);
     }
 });
-const upload = multer({ storage: storage });
+const uploadPerfil = multer({ storage: storagePerfil });
+
+const storagePublicacao = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/Uploads/Publicações');
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const nomeArquivo = `publicacao_${global.usuarioCodigo}_${Date.now()}${ext}`;
+        cb(null, nomeArquivo);
+    }
+});
+const uploadPublicacao = multer({ storage: storagePublicacao });
+
 
 /* GET Pages. */
 router.get('/', function (req, res, next) {
@@ -133,7 +146,7 @@ router.post('/Cadastro', async function (req, res, next) {
     }
 });
 
-router.post('/EditarPerfil', upload.single('foto'), async function (req, res) {
+router.post('/EditarPerfil', uploadPerfil.single('foto'), async function (req, res) {
     verificarLoginMySQL(res);
     try {
         const usuCodigo = global.usuarioCodigo;
@@ -174,7 +187,7 @@ router.post('/EditarPerfil', upload.single('foto'), async function (req, res) {
     }
 });
 
-router.post('/PublicarFotografia', upload.single('pubFoto'), async function (req, res) {
+router.post('/PublicarFotografia', uploadPublicacao.single('pubFoto'), async function (req, res) {
     verificarLoginMySQL(res);
     try {
         if (!req.file) {

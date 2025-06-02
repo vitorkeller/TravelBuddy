@@ -30,9 +30,9 @@
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="flex flex-col items-center">
                     <div>
-                        <div class="w-full mb-4 shadow-md rounded-xl">
-                            <img src="/uploads/<%= publicacao.pubFoto %>" alt="<%= publicacao.pubTitulo %>"
-                                class="rounded-xl shadow-md w-full h-[462px] max-w-full object-cover object-center">
+                        <div class="relative group w-[550px] h-[550px] mb-6">
+                            <img src="/uploads/Publicações/<%= publicacao.pubFoto %>" alt="<%= publicacao.pubTitulo %>"
+                                class="object-cover w-full h-full rounded-xl shadow-md">
                         </div>
                         <div class="border border-gray-300 rounded-xl shadow-md p-4 space-y-4 text-sm mx-auto">
                             <div class="flex items-center gap-2">
@@ -67,6 +67,16 @@
                     <p class="text-justify text-base leading-relaxed">
                         <%= publicacao.pubDescricao %>
                     </p>
+                    <div class="flex flex-wrap gap-2 mt-8">
+                        <% if (publicacao.categorias && publicacao.categorias.length> 0) { %>
+                            <% publicacao.categorias.forEach(function(cat) { %>
+                                <span
+                                    class="inline-block bg-black text-white text-sm font-medium px-2 py-2 rounded-full">
+                                    <%= cat.catNome %>
+                                </span>
+                                <% }); %>
+                                    <% } %>
+                    </div>
                 </div>
             </div>
         </div>
