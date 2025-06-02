@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: localhost    Database: TravelBuddy
+-- Host: localhost    Database: travelbuddy
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -53,7 +53,7 @@ CREATE TABLE `categorias` (
   `catNome` char(40) DEFAULT NULL,
   `catNomeNormal` char(40) DEFAULT '.',
   PRIMARY KEY (`catCodigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `categorias` (
 
 LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-INSERT INTO `categorias` VALUES (1,'Natureza','natureza'),(6,'Pessoas','pessoas'),(7,'Cachorros','cachorros'),(8,'Café','cafe'),(9,'Pássaros','passaros'),(10,'Carros','carros');
+INSERT INTO `categorias` VALUES (1,'Carro','carro'),(2,'Cachorro','cachorro'),(3,'Paisagem','paisagem'),(4,'Montanha','montanha'),(5,'Life Style','lifestyle'),(6,'Fofo','fofo'),(7,'Pintura','pintura'),(8,'Dança','danca'),(9,'Futebol','futebol'),(10,'Trem','trem'),(11,'Corrida','corrida'),(12,'Urbana','urbana'),(13,'Noturna','noturna'),(14,'Viagem','viagem'),(15,'Arquitetura','arquitetura'),(16,'Moda','moda'),(17,'Natureza','natureza'),(18,'Subaquática','subaquatica'),(19,'Aérea','aerea'),(20,'Esportes','esportes'),(21,'Documental','documental'),(22,'Culinária','culinaria'),(23,'Animais','animais'),(24,'Abstrata','abstrata'),(25,'Casamento','casamento'),(26,'Eventos','eventos'),(27,'Conceitual','conceitual'),(28,'Selfie','selfie'),(29,'Panorâmica','panoramica'),(30,'Minimalista','minimalista');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,7 +107,7 @@ CREATE TABLE `perfis` (
   PRIMARY KEY (`perCodigo`),
   KEY `fk_perfis_usuario` (`usuCodigo`),
   CONSTRAINT `fk_perfis_usuario` FOREIGN KEY (`usuCodigo`) REFERENCES `usuarios` (`usuCodigo`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +116,7 @@ CREATE TABLE `perfis` (
 
 LOCK TABLES `perfis` WRITE;
 /*!40000 ALTER TABLE `perfis` DISABLE KEYS */;
-INSERT INTO `perfis` VALUES (9,'imgPerfilPadrao.png','Você ainda não adicionou uma bio. Clique na foto e nos conte um pouco sobre você.','Você ainda não informou sua localização','Você ainda não tem interesses',14);
+INSERT INTO `perfis` VALUES (10,'imgPerfilPadrao.png','Você ainda não adicionou uma bio. Clique na foto e nos conte um pouco sobre você.','Você ainda não informou sua localização','Você ainda não tem interesses',15);
 /*!40000 ALTER TABLE `perfis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +140,7 @@ CREATE TABLE `publicacao` (
   KEY `paisCodigo` (`paisCodigo`),
   CONSTRAINT `publicacao_ibfk_1` FOREIGN KEY (`usuCodigo`) REFERENCES `usuarios` (`usuCodigo`),
   CONSTRAINT `publicacao_ibfk_2` FOREIGN KEY (`paisCodigo`) REFERENCES `pais` (`paisCodigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,6 +150,32 @@ CREATE TABLE `publicacao` (
 LOCK TABLES `publicacao` WRITE;
 /*!40000 ALTER TABLE `publicacao` DISABLE KEYS */;
 /*!40000 ALTER TABLE `publicacao` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `publicacaocategorias`
+--
+
+DROP TABLE IF EXISTS `publicacaocategorias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `publicacaocategorias` (
+  `pubCodigo` int NOT NULL,
+  `catCodigo` int NOT NULL,
+  PRIMARY KEY (`pubCodigo`,`catCodigo`),
+  KEY `catCodigo` (`catCodigo`),
+  CONSTRAINT `publicacaocategorias_ibfk_1` FOREIGN KEY (`pubCodigo`) REFERENCES `publicacao` (`pubCodigo`) ON DELETE CASCADE,
+  CONSTRAINT `publicacaocategorias_ibfk_2` FOREIGN KEY (`catCodigo`) REFERENCES `categorias` (`catCodigo`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `publicacaocategorias`
+--
+
+LOCK TABLES `publicacaocategorias` WRITE;
+/*!40000 ALTER TABLE `publicacaocategorias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `publicacaocategorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -166,7 +192,7 @@ CREATE TABLE `usuarios` (
   `usuNome` varchar(50) DEFAULT NULL,
   `usuFoto` varchar(50) DEFAULT 'imgPerfilPadrão.png',
   PRIMARY KEY (`usuCodigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +201,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (14,'usuario@gmail.com','usuario','Usuário','imgPerfilPadrão.png');
+INSERT INTO `usuarios` VALUES (15,'usuario@gmail.com','usuario','Usuario','imgPerfilPadrão.png');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -217,4 +243,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31  0:09:37
+-- Dump completed on 2025-06-02 16:21:15
