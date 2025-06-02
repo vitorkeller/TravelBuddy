@@ -28,7 +28,7 @@ router.get('/Cadastro', function (req, res, next) {
 
 router.get('/Inicial', async function (req, res, next) {
     verificarLoginMySQL(res);
-    const categorias = await global.banco.adminBuscarCategorias();
+    const categorias = await global.banco.buscarCategorias();
     res.render('Inicial', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, categorias });
 });
 
@@ -42,14 +42,21 @@ router.get('/Termos', function (req, res, next) {
     res.render('Termos', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
 });
 
-router.get('/Imagem', function (req, res, next) {
+router.get('/PublicarFotografia', async function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('Imagem', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
+    const paises = await global.banco.buscarPaises();
+    const categorias = await global.banco.buscarCategorias();
+    res.render('PublicarFotografia', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, categorias, paises });
 });
 
-router.get('/PublicarFotografia', function (req, res, next) {
+router.get('/Imagem/:id', async function (req, res) {
     verificarLoginMySQL(res);
-    res.render('PublicarFotografia', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
+    const pubCodigo = req.params.id;
+    const publicacao = await global.banco.buscarPublicacaoPorId(pubCodigo);
+    if (!publicacao) {
+        return res.status(404).render('404', { mensagem: 'Publicação não encontrada.' });
+    }
+    res.render('Imagem', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, publicacao });
 });
 
 router.get('/Curtidas', function (req, res, next) {
@@ -62,13 +69,15 @@ router.get('/Perfil', async function (req, res, next) {
     const perInteresse = await global.banco.buscarInteresses(global.usuarioCodigo);
     const perDescricao = await global.banco.buscarDescricao(global.usuarioCodigo);
     const perLocalizacao = await global.banco.buscarLocalizacao(global.usuarioCodigo);
+    const publicacao = await global.banco.buscarPublicacaoPorUsuario(global.usuarioCodigo);
     res.render('Perfil', {
         titulo: 'TravelBuddy',
         imagem: global.usuarioFoto,
         nome: global.usuarioNome,
         localizacao: perLocalizacao,
         interesses: perInteresse,
-        descricao: perDescricao
+        descricao: perDescricao,
+        publicacao
     });
 });
 
@@ -87,12 +96,6 @@ router.get('/EditarPerfil', async function (req, res, next) {
         interesses: perInteresse,
         descricao: perDescricao
     });
-});
-
-router.get('/PostagemImagem', async function (req, res, next) {
-    verificarLoginMySQL(res);
-    const categorias = await global.banco.adminBuscarCategorias();
-    res.render('PostagemImagem', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, categorias });
 });
 
 router.get('/sair', function (req, res, next) {
@@ -168,6 +171,39 @@ router.post('/EditarPerfil', upload.single('foto'), async function (req, res) {
     } catch (error) {
         console.error('Erro ao atualizar perfil:', error);
         res.status(500).send('Erro ao atualizar perfil.');
+    }
+});
+
+router.post('/PublicarFotografia', upload.single('pubFoto'), async function (req, res) {
+    verificarLoginMySQL(res);
+    try {
+        if (!req.file) {
+            return res.status(400).send('A foto é obrigatória.');
+        }
+        const usuCodigo = global.usuarioCodigo;
+        const pubTitulo = req.body.pubTitulo;
+        const pubDescricao = req.body.pubDescricao;
+        const pubData = req.body.pubData;
+        const pubFoto = req.file.filename;
+        const paisCodigo = req.body.paisCodigo;
+        let categorias = req.body.categorias;
+
+        if (!Array.isArray(categorias) && categorias) categorias = [categorias];
+
+        if (!pubTitulo || !pubDescricao || !pubData || !pubFoto || !paisCodigo || !categorias || categorias.length === 0) {
+            return res.status(400).send('Todos os campos são obrigatórios.');
+        }
+        if (categorias.length > 3) {
+            return res.status(400).send('Selecione no máximo 3 categorias.');
+        }
+        const pubCodigo = await global.banco.publicarFotografia({ pubTitulo, pubDescricao, pubData, pubFoto, paisCodigo, usuCodigo });
+        for (const catCodigo of categorias) {
+            await global.banco.vincularCategoriaPublicacao(pubCodigo, catCodigo);
+        }
+        res.redirect('/Perfil');
+    } catch (error) {
+        console.error('Erro ao publicar fotografia:', error);
+        res.status(500).send('Erro ao publicar fotografia.');
     }
 });
 

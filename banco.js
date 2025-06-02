@@ -99,6 +99,47 @@ async function buscarAdmin(admin) {
     return adminEncontrado && adminEncontrado.length > 0 ? adminEncontrado[0] : {};
 }
 
+async function buscarCategorias() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM categorias ORDER BY catCodigo;";
+    const [categorias] = await conexao.query(sql);
+    return categorias;
+}
+
+async function buscarPaises() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM pais ORDER BY paisCodigo;";
+    const [paises] = await conexao.query(sql);
+    return paises;
+}
+
+async function publicarFotografia({ pubTitulo, pubDescricao, pubData, pubFoto, paisCodigo, usuCodigo }) {
+    const conexao = await conectarBD();
+    const sql = "INSERT INTO publicacao (pubTitulo, pubDescricao, pubData, pubFoto, paisCodigo, usuCodigo) VALUES (?, ?, ?, ?, ?, ?);";
+    const [resultado] = await conexao.query(sql, [pubTitulo, pubDescricao, pubData, pubFoto, paisCodigo, usuCodigo]);
+    return resultado.insertId;
+}
+
+async function vincularCategoriaPublicacao(pubCodigo, catCodigo) {
+    const conexao = await conectarBD();
+    const sql = "INSERT INTO publicacaoCategorias (pubCodigo, catCodigo) VALUES (?, ?);";
+    await conexao.query(sql, [pubCodigo, catCodigo]);
+}
+
+async function buscarPublicacaoPorUsuario(usuCodigo) {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM publicacao WHERE usuCodigo=? ORDER BY pubData DESC;";
+    const [publicacoes] = await conexao.query(sql, [usuCodigo]);
+    return publicacoes;
+}
+
+async function buscarPublicacaoPorId(pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = " SELECT p.*, u.usuNome, pa.paisNome FROM publicacao p INNER JOIN usuarios u ON u.usuCodigo = p.usuCodigo INNER JOIN pais pa ON pa.paisCodigo = p.paisCodigo WHERE p.pubCodigo = ?;";
+    const [publicacoes] = await conexao.query(sql, [pubCodigo]);
+    return publicacoes && publicacoes.length > 0 ? publicacoes[0] : null;
+}
+
 async function adminBuscarCategorias() {
     const conexao = await conectarBD();
     const sql = "SELECT * FROM categorias ORDER BY catCodigo;";
@@ -206,4 +247,4 @@ async function adminBuscarPaises() {
 
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPaises };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPaises };

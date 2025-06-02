@@ -17,39 +17,34 @@
 
 <body class="bg-white text-black font-[Poppins]">
     <%- include('componentes/header') %>
-        <div class="flex justify-center items-center min-h-screen bg-white py-6">
-            <form action="/PublicarImagem" method="POST" enctype="multipart/form-data"
+        <div class="flex justify-center items-center min-h-screen max-w-7xl mx-auto px-2 py-6"">
+            <form action="/PublicarFotografia" method="POST" enctype="multipart/form-data"
                 class="w-full max-w-3xl bg-white border border-gray-200 rounded-xl shadow-sm p-8 space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
-                    <h2 class="text-xl font-semibold text-gray-900">Publicar Imagem</h2>
-                    <p class="mt-1 text-sm text-gray-600">Compartilhe suas melhores fotos com a comunidade. Adicione
-                        detalhes sobre sua experiência.</p>
+                    <h2 class="text-xl font-semibold text-gray-900"> Publicar Imagem </h2>
+                    <p class="mt-1 text-sm text-gray-600"> Compartilhe suas melhores fotos com a comunidade. Adicione
+                        detalhes sobre sua experiência. </p>
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <!-- Foto da Publicação -->
                         <div class="col-span-full">
-                            <label for="pubFoto" class="block text-sm font-medium text-gray-900">Foto da Publicação
-                                *</label>
+                            <label for="pubFoto" class="block text-sm font-medium text-gray-900"> Foto da Publicação *
+                            </label>
                             <div
                                 class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                                 <div class="text-center">
                                     <img id="preview-img" src="/placeholder.svg" alt="Preview da imagem"
                                         class="mx-auto h-48 w-auto object-cover rounded-lg hidden">
-                                    <svg id="upload-icon" class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 19.5 6v6a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 12V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                                    <i id="upload-icon" class="fa-solid fa-file-import mx-auto h-12 w-12 text-gray-300"
+                                        style="font-size:3rem;"></i>
                                     <div class="mt-4 flex text-sm text-gray-600">
                                         <label for="pubFoto"
                                             class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                            <span>Carregar uma foto</span>
+                                            <span> Carregar uma foto </span>
                                             <input id="pubFoto" name="pubFoto" type="file" accept="image/*" required
                                                 class="sr-only">
                                         </label>
-                                        <p class="pl-1">ou arraste e solte</p>
+                                        <p class="pl-1"> ou arraste e solte </p>
                                     </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG, GIF até 10MB</p>
+                                    <p class="text-xs text-gray-500"> PNG, JPG, GIF até 10MB </p>
                                 </div>
                             </div>
                             <script>
@@ -76,53 +71,49 @@
                                 }
                             </script>
                         </div>
-                        <!-- Título da Publicação -->
                         <div class="col-span-full">
-                            <label for="pubTitulo" class="block text-sm font-medium text-gray-900">Título da
-                                Publicação *</label>
+                            <label for="pubTitulo" class="block text-sm font-medium text-gray-900"> Título da Publicação
+                                * </label>
                             <div class="mt-2">
                                 <input type="text" name="pubTitulo" id="pubTitulo" maxlength="30" required
                                     placeholder="Dê um título chamativo para sua foto"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
                                     oninput="document.getElementById('titulo-count').textContent = this.value.length + '/30'" />
                                 <div class="text-xs text-gray-500 mt-1 text-right">
-                                    <span id="titulo-count">0/30</span>
+                                    <span id="titulo-count"> 0/30 </span>
                                 </div>
                             </div>
                         </div>
-                        <!-- Descrição da Publicação -->
                         <div class="col-span-full">
-                            <label for="pubDescricao" class="block text-sm font-medium text-gray-900">Descrição
-                                *</label>
+                            <label for="pubDescricao" class="block text-sm font-medium text-gray-900"> Descrição *
+                            </label>
                             <div class="mt-2">
                                 <textarea name="pubDescricao" id="pubDescricao" rows="6" maxlength="400" required
                                     placeholder="Conte a história por trás desta foto, onde foi tirada, o que você sentiu..."
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
                                     oninput="document.getElementById('descricao-count').textContent = this.value.length + '/400'"></textarea>
                                 <div class="text-xs text-gray-500 mt-1 text-right">
-                                    <span id="descricao-count">0/400</span>
+                                    <span id="descricao-count"> 0/400 </span>
                                 </div>
                             </div>
-                            <p class="mt-3 text-sm text-gray-600">Descreva sua experiência e inspire outros
-                                viajantes.</p>
+                            <p class="mt-3 text-sm text-gray-600"> Descreva sua experiência e inspire outros viajantes.
+                            </p>
                         </div>
-                        <!-- Data da Publicação -->
                         <div class="sm:col-span-3">
-                            <label for="pubData" class="block text-sm font-medium text-gray-900">Data da
-                                Foto</label>
+                            <label for="pubData" class="block text-sm font-medium text-gray-900"> Data da Foto *
+                            </label>
                             <div class="mt-2">
                                 <input type="date" name="pubData" id="pubData"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm" />
                             </div>
-                            <p class="mt-1 text-xs text-gray-500">Quando esta foto foi tirada?</p>
+                            <p class="mt-1 text-xs text-gray-500"> Quando esta foto foi tirada? </p>
                         </div>
-                        <!-- País -->
                         <div class="sm:col-span-3">
-                            <label for="paisCodigo" class="block text-sm font-medium text-gray-900">País *</label>
+                            <label for="paisCodigo" class="block text-sm font-medium text-gray-900"> País * </label>
                             <div class="mt-2">
                                 <select name="paisCodigo" id="paisCodigo" required
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
-                                    <option value="">Selecione um país</option>
+                                    <option value=""> Selecione um país </option>
                                     <% if (typeof paises !=='undefined' && paises) { %>
                                         <% paises.forEach(pais=> { %>
                                             <option value="<%= pais.paisCodigo %>">
@@ -133,23 +124,59 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="sm:col-span-3">
+                            <label class="block text-sm font-medium text-gray-900 mb-2"> Categorias *</label>
+                            <details class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
+                                <summary
+                                    class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden cursor-pointer">
+                                    <span class="text-sm font-medium text-black"> Selecione até 3 categorias </span>
+                                    <span class="transition-transform group-open:-rotate-180">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div
+                                    class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
+                                    <div class="flex items-center justify-between px-2 py-2">
+                                        <span id="selected-count" class="text-sm text-gray-700"> 0 Selecionadas </span>
+                                        <button id="clear-all" type="button"
+                                            class="text-xs text-black hover:underline ml-2"> Limpar Tudo </button>
+                                    </div>
+                                    <fieldset class="p-3">
+                                        <legend class="sr-only"> Checkboxes </legend>
+                                        <div class="flex flex-col items-start gap-3">
+                                            <% categorias.forEach(function(categoria, idx) { %>
+                                                <label for="catOption<%= idx %>" class="inline-flex items-center gap-3">
+                                                    <input type="checkbox" name="categorias"
+                                                        value="<%= categoria.catCodigo %>"
+                                                        class="size-5 rounded border-gray-300 shadow-sm category-checkbox"
+                                                        id="catOption<%= idx %>" />
+                                                    <span class="text-sm font-medium text-black">
+                                                        <%= categoria.catNome %>
+                                                    </span>
+                                                </label>
+                                                <% }) %>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </details>
+                            <p class="mt-1 text-xs text-gray-500"> Selecione até 3 categorias. </p>
+                        </div>
                     </div>
                 </div>
-                <!-- Botões de Ação -->
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <a href="/Feed" class="text-sm font-semibold text-gray-900">Cancelar</a>
+                    <a href="/Perfil" class="text-sm font-semibold text-gray-900"> Cancelar </a>
                     <button type="submit"
                         class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                        Publicar Imagem
-                    </button>
+                        Publicar Imagem </button>
                 </div>
             </form>
         </div>
-        <!-- Scrit para configurações iniciais e validação -->
         <script>
-            // Definir data atual como padrão
             document.getElementById('pubData').valueAsDate = new Date();
-            // Validação do formulário antes do envio
             document.querySelector('form').addEventListener('submit', function (e) {
                 const titulo = document.getElementById('pubTitulo').value.trim();
                 const descricao = document.getElementById('pubDescricao').value.trim();
@@ -171,19 +198,41 @@
                     alert('A descrição deve ter no máximo 400 caracteres.');
                     return false;
                 }
-                // Validar tipo de arquivo
                 if (foto && !foto.type.startsWith('image/')) {
                     e.preventDefault();
                     alert('Por favor, selecione apenas arquivos de imagem.');
                     return false;
                 }
-                // Validar tamanho do arquivo (10MB)
                 if (foto && foto.size > 10 * 1024 * 1024) {
                     e.preventDefault();
                     alert('A imagem deve ter no máximo 10MB.');
                     return false;
                 }
             });
+        </script>
+        <script>
+            function updateSelectedCount() {
+                const checkboxes = document.querySelectorAll('.category-checkbox');
+                const count = Array.from(checkboxes).filter(cb => cb.checked).length;
+                document.getElementById('selected-count').textContent = `${count} Selecionadas`;
+                checkboxes.forEach(cb => {
+                    if (count >= 3 && !cb.checked) {
+                        cb.disabled = true;
+                    } else {
+                        cb.disabled = false;
+                    }
+                });
+            }
+            document.querySelectorAll('.category-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateSelectedCount);
+            });
+            document.getElementById('clear-all').addEventListener('click', function () {
+                document.querySelectorAll('.category-checkbox').forEach(cb => {
+                    cb.checked = false;
+                });
+                updateSelectedCount();
+            });
+            updateSelectedCount();
         </script>
         <%- include('componentes/footer') %>
 </body>

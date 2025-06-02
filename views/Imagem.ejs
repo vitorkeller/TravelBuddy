@@ -31,82 +31,42 @@
                 <div class="flex flex-col items-center">
                     <div>
                         <div class="w-full mb-4 shadow-md rounded-xl">
-                            <img src="images/imgInicial/Images001.jpg" alt="Interior do trem"
+                            <img src="/uploads/<%= publicacao.pubFoto %>" alt="<%= publicacao.pubTitulo %>"
                                 class="rounded-xl shadow-md w-full h-[462px] max-w-full object-cover object-center">
                         </div>
                         <div class="border border-gray-300 rounded-xl shadow-md p-4 space-y-4 text-sm mx-auto">
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                    <path
-                                        d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" />
-                                </svg>
-                                <span>Vitor Keller</span>
+                                <i class="fa-solid fa-user w-4 h-4"></i>
+                                <span>
+                                    <%= publicacao.usuNome %>
+                                </span>
                             </div>
                             <hr class="my-2 border-gray-200">
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <path
-                                        d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152l0 270.8c0 9.8-6 18.6-15.1 22.3L416 503l0-302.6zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6l0 251.4L32.9 502.7C17.1 509 0 497.4 0 480.4L0 209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77l0 249.3L192 449.4 192 255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
-                                </svg>
-                                <span>Joinville - SC</span>
+                                <i class="fa-solid fa-map-location-dot w-4 h-4"></i>
+                                <span>
+                                    <%= publicacao.paisNome %>
+                                </span>
                             </div>
                             <hr class="my-2 border-gray-200">
                             <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                    <path
-                                        d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l80 0 0 56-80 0 0-56zm0 104l80 0 0 64-80 0 0-64zm128 0l96 0 0 64-96 0 0-64zm144 0l80 0 0 64-80 0 0-64zm80-48l-80 0 0-56 80 0 0 56zm0 160l0 40c0 8.8-7.2 16-16 16l-64 0 0-56 80 0zm-128 0l0 56-96 0 0-56 96 0zm-144 0l0 56-64 0c-8.8 0-16-7.2-16-16l0-40 80 0zM272 248l-96 0 0-56 96 0 0 56z" />
-                                </svg>
-                                <span>Segunda-feira, 07 de Abril de 2025</span>
+                                <i class="fa-solid fa-calendar-days w-4 h-4"></i>
+                                <span>
+                                    <%= new Date(publicacao.pubData).toLocaleDateString('pt-BR') %>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between items-start">
-                        <h1 class="text-3xl font-bold mb-6">PASSAGEM</h1>
-                        <button class="flex items-center text-sm text-black group ">
-                            <svg class="w-5 h-5 mr-1 transition-colors duration-200 text-black group-hover:text-red-600"
-                                fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
-                            </svg>
-                            Salvar
-                        </button>
+                        <h1 class="text-4xl font-bold mb-6">
+                            <%= publicacao.pubTitulo %>
+                        </h1>
                     </div>
-                    <h2 class="text-lg font-semibold mb-2">O Templo Silencioso do Trânsito</h2>
-                    <p class="text-justify text-sm mb-4 leading-relaxed">
-                        Dentro do ritmo calmo dos trilhos matinais, o trem se torna mais do que uma máquina —
-                        torna-se
-                        um veículo de reflexão, um espaço sagrado em movimento. Banhado por uma luz dourada, cada
-                        assento acolhe uma história, uma alma momentaneamente suspensa entre a partida e a chegada.
-                        Nessa procissão silenciosa pela terra, vislumbramos algo antigo, algo profundamente humano.
+                    <p class="text-justify text-base leading-relaxed">
+                        <%= publicacao.pubDescricao %>
                     </p>
-                    <p class="text-justify text-sm mb-6 leading-relaxed">
-                        O leve balançar do vagão, o sussurro suave das rodas nos trilhos e a luz filtrada que aquece
-                        os
-                        rostos dos passageiros — esses não são apenas elementos da viagem, mas sussurros de
-                        serenidade
-                        em um mundo inquieto. Cada alça pendurada balança como um sino silencioso em um templo em
-                        movimento, e o simples ato de sentar-se torna-se uma meditação.
-                    </p>
-                    <h2 class="text-lg font-semibold mb-2">Uma Jornada de Quietude</h2>
-                    <p class="text-justify text-sm leading-relaxed">
-                        Aqui, entre desconhecidos e silêncios, há uma união sem palavras. Sem necessidade de
-                        apresentações, sem importância do destino. O senhor idoso com sua máscara e casaco, a
-                        estudante
-                        olhando pela janela iluminada pelo sol, a mãe segurando a mão do filho — todos fazem parte
-                        de
-                        uma prece silenciosa sussurrada pelo universo.
-                    </p>
-                    <p class="text-justify text-sm leading-relaxed mt-4">
-                        Como um mantra em movimento, a jornada oferece uma pausa do barulho, da pressa, do peso. Ela
-                        nos
-                        lembra de que todos somos peregrinos — nos trilhos, no tempo, na vida — seguindo em direção
-                        a
-                        algum lugar, suavemente, silenciosamente, juntos.
-                    </p>
-                    <div class="py-6">
-                    </div>
                 </div>
             </div>
         </div>
