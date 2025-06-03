@@ -106,61 +106,46 @@
                         <p class="mt-1 text-xs text-gray-500">Quando esta foto foi tirada?</p>
                     </div>
                     <div class="sm:col-span-3">
-                        <label for="paisCodigo" class="block text-sm font-medium text-gray-900">País *</label>
+                        <label class="block text-sm font-medium text-gray-900">Localização</label>
                         <div class="mt-2">
-                            <select name="paisCodigo" id="paisCodigo" required
-                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
-                                <option value="">Selecione um país</option>
-                                <% if (typeof paises !=='undefined' && paises) { %>
-                                    <% paises.forEach(pais=> { %>
-                                        <option value="<%= pais.paisCodigo %>">
-                                            <%= pais.paisNome %>
-                                        </option>
-                                        <% }); %>
-                                            <% } %>
-                            </select>
+                            <details class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
+                                <summary
+                                    class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden cursor-pointer">
+                                    <span class="text-sm font-medium text-black">Selecione um país</span>
+                                    <span class="transition-transform group-open:-rotate-180">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div
+                                    class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
+                                    <fieldset class="p-3">
+                                        <legend class="sr-only">Radios</legend>
+                                        <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
+                                            <% paises.forEach(function(pais, idx) { %>
+                                                <label for="localizacaoOption<%= idx %>"\
+                                                    class="inline-flex items-center gap-3">
+                                                    <input type="radio" name="paisCodigo" value="<%= pais.paisCodigo %>" <%= idx===0 ? 'required' : '' %>
+                                                        class="size-5 rounded border-gray-300 shadow-sm localizacao-radio"
+                                                        id="localizacaoOption<%= idx %>" <%=idx===0 ? 'required' : '' %>
+                                                    />
+                                                    <span class="text-sm font-medium text-black">
+                                                        <%= pais.paisNome %>
+                                                    </span>
+                                                </label>
+                                                <% }) %>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </details>
+                            <small class="text-gray-500">Escolha apenas um país para sua localização.</small>
                         </div>
                     </div>
                     <div class="sm:col-span-3">
-                        <label class="block text-sm font-medium text-gray-900 mb-2">Categorias *</label>
-                        <details class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
-                            <summary
-                                class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden cursor-pointer">
-                                <span class="text-sm font-medium text-black">Selecione até 3 categorias</span>
-                                <span class="transition-transform group-open:-rotate-180">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </span>
-                            </summary>
-                            <div
-                                class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
-                                <div class="flex items-center justify-between px-2 py-2">
-                                    <span id="selected-count" class="text-sm text-gray-700">0 Selecionadas</span>
-                                    <button id="clear-all" type="button"
-                                        class="text-xs text-black hover:underline ml-2">Limpar Tudo</button>
-                                </div>
-                                <fieldset class="p-3">
-                                    <legend class="sr-only">Checkboxes</legend>
-                                    <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
-                                        <% categorias.forEach(function(categoria, idx) { %>
-                                            <label for="catOption<%= idx %>" class="inline-flex items-center gap-3">
-                                                <input type="checkbox" name="categorias"
-                                                    value="<%= categoria.catCodigo %>"
-                                                    class="size-5 rounded border-gray-300 shadow-sm category-checkbox"
-                                                    id="catOption<%= idx %>" />
-                                                <span class="text-sm font-medium text-black">
-                                                    <%= categoria.catNome %>
-                                                </span>
-                                            </label>
-                                            <% }) %>
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </details>
-                        <p class="mt-1 text-xs text-gray-500">Selecione até 3 categorias.</p>
+                        <%- include('componentes/checkbox', { categorias: categorias, publicacao: { categorias: [] }})%>
                     </div>
                 </div>
             </div>
@@ -172,66 +157,8 @@
             </div>
             </form>
         </div>
-        <script>
-            document.getElementById('pubData').valueAsDate = new Date();
-            document.querySelector('form').addEventListener('submit', function (e) {
-                const titulo = document.getElementById('pubTitulo').value.trim();
-                const descricao = document.getElementById('pubDescricao').value.trim();
-                const foto = document.getElementById('pubFoto').files[0];
-                const pais = document.getElementById('paisCodigo').value;
-
-                if (!titulo || !descricao || !foto || !pais) {
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                    return false;
-                }
-                if (titulo.length > 30) {
-                    e.preventDefault();
-                    alert('O título deve ter no máximo 30 caracteres.');
-                    return false;
-                }
-                if (descricao.length > 400) {
-                    e.preventDefault();
-                    alert('A descrição deve ter no máximo 400 caracteres.');
-                    return false;
-                }
-                if (foto && !foto.type.startsWith('image/')) {
-                    e.preventDefault();
-                    alert('Por favor, selecione apenas arquivos de imagem.');
-                    return false;
-                }
-                if (foto && foto.size > 10 * 1024 * 1024) {
-                    e.preventDefault();
-                    alert('A imagem deve ter no máximo 10MB.');
-                    return false;
-                }
-            });
-        </script>
-        <script>
-            function updateSelectedCount() {
-                const checkboxes = document.querySelectorAll('.category-checkbox');
-                const count = Array.from(checkboxes).filter(cb => cb.checked).length;
-                document.getElementById('selected-count').textContent = `${count} Selecionadas`;
-                checkboxes.forEach(cb => {
-                    if (count >= 3 && !cb.checked) {
-                        cb.disabled = true;
-                    } else {
-                        cb.disabled = false;
-                    }
-                });
-            }
-            document.querySelectorAll('.category-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateSelectedCount);
-            });
-            document.getElementById('clear-all').addEventListener('click', function () {
-                document.querySelectorAll('.category-checkbox').forEach(cb => {
-                    cb.checked = false;
-                });
-                updateSelectedCount();
-            });
-            updateSelectedCount();
-        </script>
-        <%- include('componentes/footer') %>
+        <%- include('componentes/foto') %>
+            <%- include('componentes/footer') %>
 </body>
 
 </html>

@@ -19,7 +19,7 @@
             </div>
             <fieldset class="p-3">
                 <legend class="sr-only"> Checkboxes </legend>
-                <div class="flex flex-col items-start gap-3">
+                <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
                     <% categorias.forEach(function(categoria, idx) { %>
                         <label for="Option<%= idx %>" class="inline-flex items-center gap-3">
                             <input type="checkbox" class="size-5 rounded border-gray-300 shadow-sm category-checkbox"

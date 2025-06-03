@@ -1,0 +1,35 @@
+<script>
+    document.getElementById('pubData').valueAsDate = new Date();
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const titulo = document.getElementById('pubTitulo').value.trim();
+        const descricao = document.getElementById('pubDescricao').value.trim();
+        const foto = document.getElementById('pubFoto').files[0];
+        const pais = document.getElementById('paisCodigo').value;
+
+        if (!titulo || !descricao || !foto || !pais) {
+            e.preventDefault();
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return false;
+        }
+        if (titulo.length > 30) {
+            e.preventDefault();
+            alert('O título deve ter no máximo 30 caracteres.');
+            return false;
+        }
+        if (descricao.length > 400) {
+            e.preventDefault();
+            alert('A descrição deve ter no máximo 400 caracteres.');
+            return false;
+        }
+        if (foto && !foto.type.startsWith('image/')) {
+            e.preventDefault();
+            alert('Por favor, selecione apenas arquivos de imagem.');
+            return false;
+        }
+        if (foto && foto.size > 10 * 1024 * 1024) {
+            e.preventDefault();
+            alert('A imagem deve ter no máximo 10MB.');
+            return false;
+        }
+    });
+</script>

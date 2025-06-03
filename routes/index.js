@@ -101,19 +101,11 @@ router.get('/Perfil', async function (req, res, next) {
 
 router.get('/EditarPerfil', async function (req, res, next) {
     verificarLoginMySQL(res);
-    // Busque os dados do perfil do usuário
     const perInteresse = await global.banco.buscarInteresses(global.usuarioCodigo);
     const perDescricao = await global.banco.buscarDescricao(global.usuarioCodigo);
     const perLocalizacao = await global.banco.buscarLocalizacao(global.usuarioCodigo);
-
-    res.render('EditarPerfil', {
-        titulo: 'TravelBuddy',
-        imagem: global.usuarioFoto,
-        nome: global.usuarioNome,
-        localizacao: perLocalizacao,
-        interesses: perInteresse,
-        descricao: perDescricao
-    });
+    const paises = await global.banco.buscarPaises();
+    res.render('EditarPerfil', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, nome: global.usuarioNome, localizacao: perLocalizacao, interesses: perInteresse, descricao: perDescricao, paises });
 });
 
 router.get('/sair', function (req, res, next) {
@@ -155,31 +147,25 @@ router.post('/EditarPerfil', uploadPerfil.single('foto'), async function (req, r
     verificarLoginMySQL(res);
     try {
         const usuCodigo = global.usuarioCodigo;
-        const perInteresse = await global.banco.buscarInteresses(usuCodigo);
         const perDescricao = await global.banco.buscarDescricao(usuCodigo);
-        const perLocalizacao = await global.banco.buscarLocalizacao(usuCodigo);
         let novaFoto = global.usuarioFoto;
         if (req.file) {
             novaFoto = req.file.filename;
-
             const caminhoImagemAntiga = path.join(__dirname, '../public/uploads', global.usuarioFoto);
-
-            console.log('Tentando excluir imagem:', caminhoImagemAntiga);
-
             if (global.usuarioFoto !== 'imgPerfilPadrao.png' && fs.existsSync(caminhoImagemAntiga)) {
-                try {
-                    fs.unlinkSync(caminhoImagemAntiga);
-                    console.log('Imagem antiga excluída com sucesso');
-                } catch (err) {
-                    console.error('Erro ao excluir imagem antiga:', err);
-                }
+                try { fs.unlinkSync(caminhoImagemAntiga); } catch (err) { }
             }
         }
+        let interesses = req.body.interesses;
+        if (!Array.isArray(interesses) && interesses) interesses = [interesses];
+        if (interesses && interesses.length > 3) interesses = interesses.slice(0, 3);
+        interesses = interesses ? interesses.join(',') : '';
+
         const dados = {
             nome: req.body.nome && req.body.nome.trim() !== '' ? req.body.nome.trim() : global.usuarioNome,
             foto: req.file ? req.file.filename : global.usuarioFoto,
-            localizacao: req.body.localizacao && req.body.localizacao.trim() !== '' ? req.body.localizacao.trim() : perLocalizacao,
-            interesses: req.body.interesses && req.body.interesses.trim() !== '' ? req.body.interesses.trim() : perInteresse,
+            localizacao: req.body.localizacao || '',
+            interesses: interesses,
             descricao: req.body.descricao && req.body.descricao.trim() !== '' ? req.body.descricao.trim() : perDescricao
         };
         await global.banco.atualizarPerfil(usuCodigo, dados);

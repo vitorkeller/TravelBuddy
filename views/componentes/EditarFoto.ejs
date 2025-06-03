@@ -1,0 +1,23 @@
+<script>
+    const input = document.getElementById('profile-pic-input');
+    const img = document.getElementById('profile-pic-img');
+    const svg = document.getElementById('profile-pic-placeholder');
+    if (input) {
+        input.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    img.src = ev.target.result;
+                    img.classList.remove('hidden');
+                    svg.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = '';
+                img.classList.add('hidden');
+                svg.classList.remove('hidden');
+            }
+        });
+    }
+</script>
