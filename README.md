@@ -11,10 +11,14 @@
 ### Estrutura do Projeto
 ```
 TravelBuddy/
+├── database/
+│   ├── TravelBuddy.sql
 ├── public/
 │   ├── images/
 │   ├── javascripts/
 │   ├── uploads/
+│   ├──├── Perfil/
+│   ├──├── Publicação/
 ├── routes/
 │   ├── admin.js
 │   └── index.js
@@ -73,6 +77,14 @@ TravelBuddy/
 
 6. **Acesse no navegador:**  
    [http://localhost:3000](http://localhost:3000)
+   - **Para acessar como usuário comum:**  
+     E-mail: `usuario@gmail.com`  
+     Senha: `usuario`
+
+   [http://localhost:3000/admin](http://localhost:3000/admin)  
+   - **Para acessar o painel admin:**  
+     E-mail: `admin@gmail.com`  
+     Senha: `admin`
 
 ## Criadores
 
