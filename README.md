@@ -44,25 +44,27 @@ TravelBuddy/
 1. **Clone o repositório:**
    ```sh
    git clone https://github.com/vitorkeller/travelbuddy.git
+   ```
+   ```sh
    cd travelbuddy
    ```
-   
+
 2. **Instale as dependências:**
    ```sh
    npm install
    ```
 
-3. **Importando o banco de dados**
+3. **Configure o banco de dados:**
+   - Crie um banco MySQL chamado `travelbuddy`.
+   - Ajuste as configurações de conexão em `banco.js` se necessário.
+
+4. **Importando o banco de dados**
     - O script para criar as tabelas e dados iniciais está em `database/travelbuddy.sql`.
     - Para importar no MySQL, use:
     
     ```sh
-    mysql -u root -p travelbuddy < database/travelbuddy.sql
+    mysql -u root travelbuddy < database/travelbuddy.sql
     ```
-
-4. **Configure o banco de dados:**
-   - Crie um banco MySQL chamado `travelbuddy`.
-   - Ajuste as configurações de conexão em `banco.js` se necessário.
 
 5. **Inicie o projeto:**
    ```sh
