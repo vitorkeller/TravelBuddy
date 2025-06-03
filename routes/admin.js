@@ -114,6 +114,12 @@ router.get('/ExcluirPublicacao/:id', async function (req, res, next) {
     if (!publicacao) {
         return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: 'Publicação não encontrada.', sucesso: false });
     }
+    if (publicacao.pubFoto) {
+        const imgPath = path.join(__dirname, '../public/uploads/Publicações', publicacao.pubFoto);
+        if (fs.existsSync(imgPath)) {
+            fs.unlinkSync(imgPath);
+        }
+    }
     await global.banco.adminExcluirPublicacao(pubCodigo);
     return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: "Publicação excluída com sucesso.", sucesso: true });
 });
