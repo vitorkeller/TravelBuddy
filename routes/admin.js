@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+const dirPublicacoes = path.join(__dirname, '../public/Uploads/Publicações');
+if (!fs.existsSync(dirPublicacoes)) {
+    fs.mkdirSync(dirPublicacoes, { recursive: true });
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
