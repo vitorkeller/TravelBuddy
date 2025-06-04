@@ -250,7 +250,6 @@ async function adminExcluirPublicacao(pubCodigo) {
     const conexao = await conectarBD();
     const path = require('path');
     const fs = require('fs');
-
     const [publicacoes] = await conexao.query("SELECT pubFoto FROM publicacao WHERE pubCodigo=?", [pubCodigo]);
     if (publicacoes.length > 0 && publicacoes[0].pubFoto) {
         const imgPath = path.join(__dirname, 'public', 'uploads', 'Publicações', publicacoes[0].pubFoto);
@@ -288,10 +287,8 @@ async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubF
     const conexao = await conectarBD();
     const sql = "UPDATE publicacao SET pubTitulo=?, pubDescricao=?, pubFoto=?, paisCodigo=? WHERE pubCodigo=?";
     await conexao.query(sql, [pubTitulo, pubDescricao, pubFoto, paisCodigo, pubCodigo]);
-
     const sqlDel = "DELETE FROM publicacaocategorias WHERE pubCodigo=?";
     await conexao.query(sqlDel, [pubCodigo]);
-
     if (categorias && categorias.length > 0) {
         const categoriasArr = Array.isArray(categorias) ? categorias : [categorias];
         for (const catCodigo of categoriasArr) {
