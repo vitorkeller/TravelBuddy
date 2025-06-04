@@ -39,7 +39,7 @@
                             <form id="formPublicacao" action="/admin/AtualizarPublicacao/<%= publicacao.pubCodigo %>"
                                 method="POST" enctype="multipart/form-data">
                                 <div class="mb-4">
-                                    <label for="pubTitulo" class="block text-gray-700 text-sm font-medium mb-2">Título
+                                    <label for="pubTitulo" class="block text-gray-700 text-sm font-medium mb-2">Título *
                                     </label>
                                     <input type="text" id="pubTitulo" name="pubTitulo"
                                         value="<%= publicacao.pubTitulo %>"
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="pubDescricao"
-                                        class="block text-gray-700 text-sm font-medium mb-2">Descrição
+                                        class="block text-gray-700 text-sm font-medium mb-2">Descrição *
                                     </label>
                                     <input type="text" id="pubDescricao" name="pubDescricao"
                                         value="<%= publicacao.pubDescricao %>"
@@ -57,19 +57,51 @@
                                 </div>
                                 <%- include('../componentes/checkbox') %>
                                     <div class="mb-4">
-                                        <label for="paisCodigo"
-                                            class="block text-gray-700 text-sm font-medium mb-2">País
-                                        </label>
-                                        <select id="paisCodigo" name="paisCodigo"
-                                            class="w-full bg-gray-50 text-black border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                                            required size="6">
-                                            <% paises.forEach(function(pais) { %>
-                                                <option value="<%= pais.paisCodigo %>"
-                                                    <%=publicacao.paisCodigo==pais.paisCodigo ? 'selected' : '' %>>
-                                                    <%= pais.paisNome %>
-                                                </option>
-                                                <% }) %>
-                                        </select>
+                                        <label class="block text-gray-700 text-sm font-medium mb-2">Localização
+                                            *</label>
+                                        <div class="mt-2">
+                                            <details
+                                                class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
+                                                <summary
+                                                    class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden cursor-pointer">
+                                                    <span class="text-sm font-medium text-black">Selecione um
+                                                        país</span>
+                                                    <span class="transition-transform group-open:-rotate-180">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="size-4">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                        </svg>
+                                                    </span>
+                                                </summary>
+                                                <div
+                                                    class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
+                                                    <fieldset class="p-3">
+                                                        <legend class="sr-only">Radios</legend>
+                                                        <div
+                                                            class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
+                                                            <% paises.forEach(function(pais, idx) { %>
+                                                                <label for="localizacaoOption<%= idx %>"
+                                                                    class="inline-flex items-center gap-3">
+                                                                    <input type="radio" name="paisCodigo"
+                                                                        value="<%= pais.paisCodigo %>"
+                                                                        class="size-5 rounded border-gray-300 shadow-sm localizacao-radio"
+                                                                        id="localizacaoOption<%= idx %>"
+                                                                        <%=publicacao.paisCodigo==pais.paisCodigo
+                                                                        ? 'checked' : '' %> required />
+                                                                    <span class="text-sm font-medium text-black">
+                                                                        <%= pais.paisNome %>
+                                                                    </span>
+                                                                </label>
+                                                                <% }) %>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </details>
+                                            <small class="text-gray-500">Escolha apenas um país para sua
+                                                localização.</small>
+                                        </div>
                                     </div>
                                     <div class="mb-4">
                                         <label class="block text-gray-700 text-sm font-medium mb-2">Foto Atual</label>

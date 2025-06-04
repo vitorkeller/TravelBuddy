@@ -69,6 +69,13 @@ async function atualizarUsuarioNome(usuCodigo, nome) {
     await conexao.query(sql, [nome, usuCodigo]);
 }
 
+async function proximoNumeroPublicacao(usuCodigo) {
+    const conexao = await conectarBD();
+    const sql = "SELECT COUNT(*) AS total FROM publicacao WHERE usuCodigo = ?";
+    const [result] = await conexao.query(sql, [usuCodigo]);
+    return (result[0].total || 0) + 1;
+}
+
 async function atualizarFoto(usuCodigo, foto) {
     const conexao = await conectarBD();
     const sql = "UPDATE usuarios SET usuFoto=? WHERE usuCodigo=?;";
@@ -199,8 +206,7 @@ async function adminBuscarUsuarioPorCodigo(usuCodigo) {
 
 async function adminExcluirUsuario(usuCodigo) {
     const conexao = await conectarBD();
-    const sql = "DELETE FROM usuarios WHERE usuCodigo=?;";
-    await conexao.query(sql, [usuCodigo]);
+    await conexao.query("DELETE FROM usuarios WHERE usuCodigo=?", [usuCodigo]);
 }
 
 async function adminBuscarUsuarioPorEmail(usuEmail) {
@@ -242,8 +248,26 @@ async function adminBuscarPublicacaoPorCodigo(pubCodigo) {
 
 async function adminExcluirPublicacao(pubCodigo) {
     const conexao = await conectarBD();
-    const sql = "DELETE FROM publicacao WHERE pubCodigo=?;";
-    await conexao.query(sql, [pubCodigo]);
+    const path = require('path');
+    const fs = require('fs');
+
+    const [publicacoes] = await conexao.query("SELECT pubFoto FROM publicacao WHERE pubCodigo=?", [pubCodigo]);
+    if (publicacoes.length > 0 && publicacoes[0].pubFoto) {
+        const imgPath = path.join(__dirname, 'public', 'uploads', 'Publicações', publicacoes[0].pubFoto);
+        console.log(imgPath);
+        if (fs.existsSync(imgPath)) {
+            console.log('pubFoto do banco:', publicacoes[0].pubFoto);
+            console.log('Tentando apagar:', imgPath);
+            console.log('Arquivo existe?', fs.existsSync(imgPath));
+            try {
+                fs.unlinkSync(imgPath);
+                console.log('Arquivo removido:', imgPath);
+            } catch (e) {
+                console.error('Erro ao remover arquivo:', imgPath, e);
+            }
+        }
+    }
+    await conexao.query("DELETE FROM publicacao WHERE pubCodigo=?", [pubCodigo]);
 }
 
 async function adminBuscarPais() {
@@ -281,4 +305,4 @@ async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubF
 
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };

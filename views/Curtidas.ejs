@@ -17,49 +17,18 @@
 
 <body class="bg-white text-black font-[Poppins]">
     <%- include('componentes/header') %>
-        <div class="relative bg-white">
-            <div class="mx-auto max-w-7xl py-6 px-2">
-                <h1 class="flex justify-center text-3xl font-bold mb-8">Minhas Curtidas</h1>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-10">
-                    <!-- PRIMEIRA LINHA -->
-                    <div class="flex flex-col gap-y-4">
-                        <div class="group relative">
-                            <a href="/imagem">
-                                <img src="images/imgInicial/Images001.jpg" loading="lazy" alt="Imagem 01"
-                                    class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- SEGUNDA LINHA -->
-                    <div class="flex flex-col gap-y-4">
-                        <div class="group relative">
-                            <a href="/Imagem">
-                                <img src="images/imgInicial/Images004.jpg" loading="lazy" alt="Imagem 04"
-                                    class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- TERCEIRA LINHA -->
-                    <div class="flex flex-col gap-y-4">
-                        <div class="group relative">
-                            <a href="/Imagem">
-                                <img src="images/imgInicial/Images006.jpg" loading="lazy" alt="Imagem 06"
-                                    class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- QUARTA LINHA -->
-                    <div class="flex flex-col gap-y-4">
-                        <div class="group relative">
-                            <a href="/Imagem">
-                                <img src="images/imgInicial/Images008.jpg" loading="lazy" alt="Imagem 08"
-                                    class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
-                            </a>
+        <main class="flex-grow flex items-center justify-center">
+            <div class="w-full">
+                <div class="mx-auto max-w-7xl py-20 px-2">
+                    <h1 class="flex justify-center text-3xl font-bold mb-8">Minhas Curtidas</h1>
+                    <div class="grid grid-cols-1 gap-x-4 gap-y-10">
+                        <div class="w-full flex flex-col items-center justify-center">
+                            <span class="text-gray-400 text-lg">Você ainda não curtiu nenhuma publicação.</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
         <%- include('componentes/footer') %>
 </body>
 

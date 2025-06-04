@@ -106,7 +106,7 @@
                         <p class="mt-1 text-xs text-gray-500">Quando esta foto foi tirada?</p>
                     </div>
                     <div class="sm:col-span-3">
-                        <label class="block text-sm font-medium text-gray-900">Localização</label>
+                        <label class="block text-sm font-medium text-gray-900">Localização *</label>
                         <div class="mt-2">
                             <details class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
                                 <summary
@@ -126,15 +126,16 @@
                                         <legend class="sr-only">Radios</legend>
                                         <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
                                             <% paises.forEach(function(pais, idx) { %>
-                                                <label for="localizacaoOption<%= idx %>"\
+                                                <label for="localizacaoOption<%= idx %>" \
                                                     class="inline-flex items-center gap-3">
-                                                    <input type="radio" name="paisCodigo" value="<%= pais.paisCodigo %>" <%= idx===0 ? 'required' : '' %>
-                                                        class="size-5 rounded border-gray-300 shadow-sm localizacao-radio"
-                                                        id="localizacaoOption<%= idx %>" <%=idx===0 ? 'required' : '' %>
-                                                    />
-                                                    <span class="text-sm font-medium text-black">
-                                                        <%= pais.paisNome %>
-                                                    </span>
+                                                    <input type="radio" name="paisCodigo" value="<%= pais.paisCodigo %>"
+                                                        <%=idx===0 ? 'required' : '' %>
+                                                    class="size-5 rounded border-gray-300 shadow-sm localizacao-radio"
+                                                    id="localizacaoOption<%= idx %>" <%=idx===0 ? 'required' : '' %>
+                                                            />
+                                                            <span class="text-sm font-medium text-black">
+                                                                <%= pais.paisNome %>
+                                                            </span>
                                                 </label>
                                                 <% }) %>
                                         </div>
@@ -153,7 +154,8 @@
                 <a href="/Perfil" class="text-sm font-semibold text-gray-900">Cancelar</a>
                 <button type="submit"
                     class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                    Publicar Imagem</button>
+                    Publicar Imagem
+                </button>
             </div>
             </form>
         </div>

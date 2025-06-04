@@ -14,8 +14,11 @@ const storage = multer.diskStorage({
         cb(null, 'public/uploads/Publicações');
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+        if (req.body && req.body.pubFotoAntiga) {
+            cb(null, req.body.pubFotoAntiga);
+        } else {
+            cb(null, file.originalname);
+        }
     }
 });
 const upload = multer({ storage: storage });
@@ -74,10 +77,41 @@ router.get('/ExcluirUsuario/:id', async function (req, res, next) {
     const usuCodigo = req.params.id;
     const usuario = await global.banco.adminBuscarUsuarioPorCodigo(usuCodigo);
     if (!usuario) {
-        return res.render('admin/Usuarios', { admNome: global.admNome, usuarios: await global.banco.adminBuscarUsuarios(), mensagem: 'Usuário não encontrado.', sucesso: false });
+        return res.render('admin/Usuarios', {
+            admNome: global.admNome,
+            usuarios: await global.banco.adminBuscarUsuarios(),
+            mensagem: 'Usuário não encontrado.',
+            sucesso: false
+        });
+    }
+    const publicacoes = await global.banco.adminBuscarPublicacoes();
+    for (const pub of publicacoes) {
+        if (pub.usuCodigo == usuCodigo && pub.pubFoto) {
+            const imgPath = path.join(__dirname, '../public/uploads/Publicações', pub.pubFoto);
+            console.log('Tentando apagar:', imgPath);
+            if (fs.existsSync(imgPath)) {
+                try { fs.unlinkSync(imgPath); console.log('Arquivo removido:', imgPath); } catch (e) { }
+            }
+        }
+    }
+    if (
+        usuario.usuFoto &&
+        usuario.usuFoto !== 'imgPerfilPadrao.png' &&
+        usuario.usuFoto !== 'imgPerfilPadrão.png'
+    ) {
+        const imgPerfilPath = path.join(__dirname, '../public/uploads/Perfil', usuario.usuFoto);
+        console.log('Tentando apagar imagem de perfil:', imgPerfilPath);
+        if (fs.existsSync(imgPerfilPath)) {
+            try { fs.unlinkSync(imgPerfilPath); console.log('Arquivo removido:', imgPerfilPath); } catch (e) { }
+        }
     }
     await global.banco.adminExcluirUsuario(usuCodigo);
-    return res.render('admin/Usuarios', { admNome: global.admNome, usuarios: await global.banco.adminBuscarUsuarios(), mensagem: "Usuário excluído com sucesso.", sucesso: true });
+    return res.render('admin/Usuarios', {
+        admNome: global.admNome,
+        usuarios: await global.banco.adminBuscarUsuarios(),
+        mensagem: "Usuário excluído com sucesso.",
+        sucesso: true
+    });
 });
 
 router.get('/NovoUsuario', function (req, res, next) {
@@ -112,16 +146,20 @@ router.get('/ExcluirPublicacao/:id', async function (req, res, next) {
     const pubCodigo = req.params.id;
     const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
     if (!publicacao) {
-        return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: 'Publicação não encontrada.', sucesso: false });
-    }
-    if (publicacao.pubFoto) {
-        const imgPath = path.join(__dirname, '../public/uploads/Publicações', publicacao.pubFoto);
-        if (fs.existsSync(imgPath)) {
-            fs.unlinkSync(imgPath);
-        }
+        return res.render('admin/Publicacoes', {
+            admNome: global.admNome,
+            publicacoes: await global.banco.adminBuscarPublicacoes(),
+            mensagem: 'Publicação não encontrada.',
+            sucesso: false
+        });
     }
     await global.banco.adminExcluirPublicacao(pubCodigo);
-    return res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes: await global.banco.adminBuscarPublicacoes(), mensagem: "Publicação excluída com sucesso.", sucesso: true });
+    return res.render('admin/Publicacoes', {
+        admNome: global.admNome,
+        publicacoes: await global.banco.adminBuscarPublicacoes(),
+        mensagem: "Publicação excluída com sucesso.",
+        sucesso: true
+    });
 });
 
 router.get('/AtualizarPublicacao/:id', async function (req, res, next) {
@@ -215,11 +253,16 @@ router.post('/AtualizarUsuario/:id', async function (req, res, next) {
 router.post('/AtualizarPublicacao/:id', upload.single('pubFoto'), async function (req, res, next) {
     verificarLoginMySQL(res);
     const pubCodigo = req.params.id;
-    const { pubTitulo, pubDescricao, paisCodigo } = req.body;
+    const { pubTitulo, pubDescricao, paisCodigo, usuCodigo } = req.body;
     let categorias = req.body.categorias;
     let pubFoto = req.body.pubFotoAntiga;
-    if (req.file && req.file.filename) {
-        pubFoto = req.file.filename;
+    if (req.file && req.file.originalname) {
+        const imgPath = path.join(__dirname, '../public/uploads/Publicações', pubFoto);
+        if (fs.existsSync(imgPath)) {
+            try { fs.unlinkSync(imgPath); } catch (e) { }
+        }
+        const novoPath = path.join(__dirname, '../public/uploads/Publicações', pubFoto);
+        fs.renameSync(req.file.path, novoPath);
     }
     if (!pubTitulo || !pubDescricao || !paisCodigo || !categorias) {
         const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
@@ -230,9 +273,7 @@ router.post('/AtualizarPublicacao/:id', upload.single('pubFoto'), async function
             mensagem: "Preencha todos os campos!", sucesso: false
         });
     }
-
     await global.banco.adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubFoto, paisCodigo, categorias);
-
     const publicacao = await global.banco.adminBuscarPublicacaoPorCodigo(pubCodigo);
     const todasCategorias = await global.banco.adminBuscarCategorias();
     const paises = await global.banco.buscarPaises();

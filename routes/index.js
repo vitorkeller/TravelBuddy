@@ -33,7 +33,6 @@ const storagePublicacao = multer.diskStorage({
 });
 const uploadPublicacao = multer({ storage: storagePublicacao });
 
-
 /* GET Pages. */
 router.get('/', function (req, res, next) {
     if (global.usuarioEmail && global.usuarioEmail != '') { res.redirect('/Inicial'); }
@@ -89,13 +88,7 @@ router.get('/Perfil', async function (req, res, next) {
     const perLocalizacao = await global.banco.buscarLocalizacao(global.usuarioCodigo);
     const publicacao = await global.banco.buscarPublicacaoPorUsuario(global.usuarioCodigo);
     res.render('Perfil', {
-        titulo: 'TravelBuddy',
-        imagem: global.usuarioFoto,
-        nome: global.usuarioNome,
-        localizacao: perLocalizacao,
-        interesses: perInteresse,
-        descricao: perDescricao,
-        publicacao
+        titulo: 'TravelBuddy', imagem: global.usuarioFoto, nome: global.usuarioNome, localizacao: perLocalizacao, interesses: perInteresse, descricao: perDescricao, publicacao
     });
 });
 
@@ -150,23 +143,27 @@ router.post('/EditarPerfil', uploadPerfil.single('foto'), async function (req, r
         const perDescricao = await global.banco.buscarDescricao(usuCodigo);
         let novaFoto = global.usuarioFoto;
         if (req.file) {
-            novaFoto = req.file.filename;
-            const caminhoImagemAntiga = path.join(__dirname, '../public/uploads', global.usuarioFoto);
-            if (global.usuarioFoto !== 'imgPerfilPadrao.png' && fs.existsSync(caminhoImagemAntiga)) {
-                try { fs.unlinkSync(caminhoImagemAntiga); } catch (err) { }
+            if (
+                global.usuarioFoto &&
+                global.usuarioFoto !== 'imgPerfilPadrao.png' &&
+                global.usuarioFoto !== 'imgPerfilPadrão.png'
+            ) {
+                const caminhoImagemAntiga = path.join(__dirname, '../public/Uploads/Perfil', global.usuarioFoto);
+                if (fs.existsSync(caminhoImagemAntiga)) {
+                    try { fs.unlinkSync(caminhoImagemAntiga); } catch (err) { }
+                }
             }
+            const ext = path.extname(req.file.originalname);
+            novaFoto = `perfil_${usuCodigo}${ext}`;
+            const novoPath = path.join(__dirname, '../public/Uploads/Perfil', novaFoto);
+            fs.renameSync(req.file.path, novoPath);
         }
         let interesses = req.body.interesses;
         if (!Array.isArray(interesses) && interesses) interesses = [interesses];
         if (interesses && interesses.length > 3) interesses = interesses.slice(0, 3);
         interesses = interesses ? interesses.join(',') : '';
-
         const dados = {
-            nome: req.body.nome && req.body.nome.trim() !== '' ? req.body.nome.trim() : global.usuarioNome,
-            foto: req.file ? req.file.filename : global.usuarioFoto,
-            localizacao: req.body.localizacao || '',
-            interesses: interesses,
-            descricao: req.body.descricao && req.body.descricao.trim() !== '' ? req.body.descricao.trim() : perDescricao
+            nome: req.body.nome && req.body.nome.trim() !== '' ? req.body.nome.trim() : global.usuarioNome, foto: novaFoto, localizacao: req.body.localizacao || '', interesses: interesses, descricao: req.body.descricao && req.body.descricao.trim() !== '' ? req.body.descricao.trim() : perDescricao
         };
         await global.banco.atualizarPerfil(usuCodigo, dados);
         global.usuarioNome = dados.nome;
@@ -185,15 +182,18 @@ router.post('/PublicarFotografia', uploadPublicacao.single('pubFoto'), async fun
             return res.status(400).send('A foto é obrigatória.');
         }
         const usuCodigo = global.usuarioCodigo;
+        const numero = await global.banco.proximoNumeroPublicacao(usuCodigo);
+        const ext = path.extname(req.file.originalname);
+        const nomeArquivo = `publicacao_${usuCodigo}_${numero}${ext}`;
+        const novoPath = path.join(__dirname, '../public/Uploads/Publicações', nomeArquivo);
+        fs.renameSync(req.file.path, novoPath);
         const pubTitulo = req.body.pubTitulo;
         const pubDescricao = req.body.pubDescricao;
         const pubData = req.body.pubData;
-        const pubFoto = req.file.filename;
+        const pubFoto = nomeArquivo;
         const paisCodigo = req.body.paisCodigo;
         let categorias = req.body.categorias;
-
         if (!Array.isArray(categorias) && categorias) categorias = [categorias];
-
         if (!pubTitulo || !pubDescricao || !pubData || !pubFoto || !paisCodigo || !categorias || categorias.length === 0) {
             return res.status(400).send('Todos os campos são obrigatórios.');
         }
