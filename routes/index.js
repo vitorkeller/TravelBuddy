@@ -46,7 +46,7 @@ router.get('/Cadastro', function (req, res, next) {
 router.get('/Inicial', async function (req, res, next) {
     verificarLoginMySQL(res);
     const categorias = await global.banco.buscarCategorias();
-    const publicacoes = await global.banco.adminBuscarPublicacoes(); // Busca todas as publicações
+    const publicacoes = await global.banco.buscarPublicacoes();
     res.render('Inicial', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, categorias, publicacoes });
 });
 

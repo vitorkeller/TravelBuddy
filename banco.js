@@ -126,6 +126,13 @@ async function vincularCategoriaPublicacao(pubCodigo, catCodigo) {
     await conexao.query(sql, [pubCodigo, catCodigo]);
 }
 
+async function buscarPublicacoes() {
+    const conexao = await conectarBD();
+    const sql = "SELECT * FROM publicacao;";
+    const [publicacoes] = await conexao.query(sql);
+    return publicacoes;
+}
+
 async function buscarPublicacaoPorUsuario(usuCodigo) {
     const conexao = await conectarBD();
     const sql = "SELECT * FROM publicacao WHERE usuCodigo=? ORDER BY pubData DESC;";
@@ -302,4 +309,4 @@ async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubF
 
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
