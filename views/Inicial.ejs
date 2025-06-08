@@ -53,6 +53,16 @@
             </div>
         </main>
         <%- include('componentes/footer') %>
+            <script>
+                document.addEventListener('click', function (event) {
+                    const details = document.querySelectorAll('details');
+                    details.forEach(function (detail) {
+                        if (detail.open && !detail.contains(event.target)) {
+                            detail.open = false;
+                        }
+                    });
+                });
+            </script>
 </body>
 
 </html>

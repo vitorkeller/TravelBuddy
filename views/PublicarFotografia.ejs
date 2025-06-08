@@ -151,7 +151,8 @@
                 </div>
             </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <a href="/Perfil" class="text-sm font-semibold text-gray-900">Cancelar</a>
+                <a href="/Perfil"
+                    class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Cancelar</a>
                 <button type="submit"
                     class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
                     Publicar Imagem
@@ -161,6 +162,16 @@
         </div>
         <%- include('componentes/foto') %>
             <%- include('componentes/footer') %>
+                <script>
+                    document.addEventListener('click', function (event) {
+                        const details = document.querySelectorAll('details');
+                        details.forEach(function (detail) {
+                            if (detail.open && !detail.contains(event.target)) {
+                                detail.open = false;
+                            }
+                        });
+                    });
+                </script>
 </body>
 
 </html>
