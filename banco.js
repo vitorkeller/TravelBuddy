@@ -29,6 +29,12 @@ async function buscarUsuarioPorEmail(usuario) {
     return resultado && resultado.length > 0 ? resultado[0] : {};
 }
 
+async function atualizarSenhaUsuario(usuEmail, novaSenha) {
+    const conexao = await conectarBD();
+    const sql = "UPDATE usuarios SET usuSenha=? WHERE usuEmail=?";
+    await conexao.query(sql, [novaSenha, usuEmail]);
+}
+
 async function cadastrarUsuario(usuario) {
     const conexao = await conectarBD();
     const sql = "INSERT INTO usuarios (usuEmail, usuSenha, usuNome) VALUES (?, ?, ?)";
@@ -309,4 +315,4 @@ async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubF
 
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, atualizarSenhaUsuario, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };

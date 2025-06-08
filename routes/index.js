@@ -43,6 +43,10 @@ router.get('/Cadastro', function (req, res, next) {
     res.render('Cadastro');
 });
 
+router.get('/EsqueceuSenha', function (req, res, next) {
+    res.render('EsqueceuSenha', { mensagem: null, sucesso: null });
+});
+
 router.get('/Inicial', async function (req, res, next) {
     verificarLoginMySQL(res);
     const categorias = await global.banco.buscarCategorias();
@@ -121,6 +125,16 @@ router.post('/Login', async function (req, res, next) {
         global.usuarioNome = usuario.usuNome;
         res.redirect('/Inicial');
     } else { res.redirect('/'); }
+});
+
+router.post('/EsqueceuSenha', async function (req, res) {
+    const { usuEmail, novaSenha } = req.body;
+    const usuario = await global.banco.buscarUsuarioPorEmail({ email: usuEmail });
+    if (!usuario || !usuario.usuCodigo) {
+        return res.render('EsqueceuSenha', { mensagem: 'E-mail não encontrado.', sucesso: false });
+    }
+    await global.banco.atualizarSenhaUsuario(usuEmail, novaSenha);
+    res.render('EsqueceuSenha', { mensagem: 'Senha alterada com sucesso!', sucesso: true });
 });
 
 router.post('/Cadastro', async function (req, res, next) {
