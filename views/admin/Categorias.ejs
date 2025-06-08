@@ -123,7 +123,14 @@
                 </div>
             </main>
         </div>
-        <%- include('../componentes/SearchAdmin') %>
+        <% if (sucesso) { %>
+            <script>
+                setTimeout(() => {
+                    window.location.href = '/admin/categorias';
+                }, 1000);
+            </script>
+            <% } %>
+                <%- include('../componentes/SearchAdmin') %>
 </body>
 
 </html>
