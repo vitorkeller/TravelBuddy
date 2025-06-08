@@ -31,13 +31,13 @@ router.get('/', function (req, res, next) {
 
 router.get('/Dashboard', function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('admin/Dashboard', { admNome: global.admNome });
+    res.render('admin/Dashboard', { admNome: global.admNome, paginaAtual: '/admin/Dashboard' });
 });
 
 router.get('/Categorias', async function (req, res, next) {
     verificarLoginMySQL(res);
     const categorias = await global.banco.adminBuscarCategorias();
-    res.render('admin/Categorias', { admNome: global.admNome, categorias, mensagem: null, sucesso: false });
+    res.render('admin/Categorias', { admNome: global.admNome, categorias, mensagem: null, sucesso: false, paginaAtual: '/admin/Categorias' });
 });
 
 router.get('/ExcluirCategoria/:id', async function (req, res, next) {
@@ -69,7 +69,7 @@ router.get('/AtualizarCategoria/:id', async function (req, res, next) {
 router.get('/Usuarios', async function (req, res, next) {
     verificarLoginMySQL(res);
     const usuarios = await global.banco.adminBuscarUsuarios();
-    res.render('admin/Usuarios', { admNome: global.admNome, usuarios, mensagem: null, sucesso: false });
+    res.render('admin/Usuarios', { admNome: global.admNome, usuarios, mensagem: null, sucesso: false, paginaAtual: '/admin/Usuarios' });
 });
 
 router.get('/ExcluirUsuario/:id', async function (req, res, next) {
@@ -132,13 +132,13 @@ router.get('/AtualizarUsuario/:id', async function (req, res, next) {
 router.get('/Locais', async function (req, res, next) {
     verificarLoginMySQL(res);
     const paises = await global.banco.adminBuscarPaises();
-    res.render('admin/Locais', { admNome: global.admNome, paises });
+    res.render('admin/Locais', { admNome: global.admNome, paises, paginaAtual: '/admin/Locais' });
 });
 
 router.get('/Publicacoes', async function (req, res, next) {
     verificarLoginMySQL(res);
     const publicacoes = await global.banco.adminBuscarPublicacoes();
-    res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes, mensagem: null, sucesso: false });
+    res.render('admin/Publicacoes', { admNome: global.admNome, publicacoes, mensagem: null, sucesso: false, paginaAtual: '/admin/Publicacoes' });
 });
 
 router.get('/ExcluirPublicacao/:id', async function (req, res, next) {
@@ -178,6 +178,7 @@ router.get('/Sair', function (req, res, next) {
     delete global.admCodigo;
     delete global.admEmail;
     delete global.admSenha;
+    delete global.admNome;
     res.redirect('/admin');
 });
 
@@ -285,7 +286,7 @@ router.post('/AtualizarPublicacao/:id', upload.single('pubFoto'), async function
 
 /* FUNCTIONS */
 function verificarLoginMySQL(res) {
-    if (!global.admEmail || global.admEmail == '') res.redirect('/admin');
+    if (!global.admEmail || global.admEmail == '') return res.redirect('/admin');
 };
 
 module.exports = router;
