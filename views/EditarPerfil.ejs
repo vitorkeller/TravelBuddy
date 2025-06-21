@@ -16,7 +16,7 @@
 </head>
 
 <body class="bg-white text-black font-[Poppins]">
-    <%- include('componentes/header') %>
+    <%- include('components/header') %>
         <div class="flex justify-center items-center min-h-screen bg-white py-6">
             <form action="/EditarPerfil" method="POST" enctype="multipart/form-data"
                 class="w-full max-w-3xl bg-white border border-gray-200 rounded-xl shadow-sm p-8 space-y-12">
@@ -42,7 +42,7 @@
                             </div>
                             <p class="mt-2 text-xs text-gray-500">Carregue uma foto para personalizar seu perfil.
                             </p>
-                            <%- include('componentes/editarFoto') %>
+                            <%- include('components/editarFoto') %>
                         </div>
                         <div class="sm:col-span-3">
                             <label for="nome" class="block text-sm font-medium text-gray-900">Nome</label>
@@ -173,7 +173,7 @@
                 </div>
             </form>
         </div>
-        <%- include('componentes/footer') %>
+        <%- include('components/footer') %>
 </body>
 
 </html>

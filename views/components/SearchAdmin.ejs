@@ -1,0 +1,17 @@
+<script>
+    document.getElementById('searchInput').addEventListener('input', function (event) {
+        const filterString = event.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            let match = false;
+            cells.forEach(cell => {
+                if (cell.textContent.toLowerCase().includes(filterString)) {
+                    match = true;
+                }
+            });
+            row.style.display = match ? '' : 'none';
+        });
+    });
+</script>

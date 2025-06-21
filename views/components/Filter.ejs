@@ -1,0 +1,53 @@
+<div class="space-y-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <details class="group relative overflow-visible rounded border border-gray-300 shadow-sm">
+        <summary
+            class="flex items-center justify-between gap-2 p-3 text-gray-700 transition-colors hover:text-gray-900 [&::-webkit-details-marker]:hidden">
+            <span class="text-sm font-medium text-black"> Categorias </span>
+            <span class="transition-transform group-open:-rotate-180">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </span>
+        </summary>
+        <div
+            class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
+            <div class="flex items-center justify-between px-2 py-2">
+                <span id="selected-count" class="text-sm text-gray-700"> 0 Selecionados </span>
+                <button id="clear-all" type="button" class="text-xs text-black hover:underline ml-2"> Limpar Tudo
+                </button>
+            </div>
+            <fieldset class="p-3">
+                <legend class="sr-only"> Checkboxes </legend>
+                <div class="flex flex-col items-start gap-3 max-h-56 overflow-y-auto">
+                    <% categorias.forEach(function(categoria, idx) { %>
+                        <label for="Option<%= idx %>" class="inline-flex items-center gap-3">
+                            <input type="checkbox" class="size-5 rounded border-gray-300 shadow-sm category-checkbox"
+                                id="Option<%= idx %>" />
+                            <span class="text-sm font-medium text-black">
+                                <%= categoria.catNome %>
+                            </span>
+                        </label>
+                        <% }) %>
+                </div>
+            </fieldset>
+        </div>
+    </details>
+</div>
+<script>
+    function updateSelectedCount() {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+        const count = Array.from(checkboxes).filter(cb => cb.checked).length;
+        document.getElementById('selected-count').textContent = `${count} Selecionados`;
+    }
+    document.querySelectorAll('.category-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateSelectedCount);
+    });
+
+    document.getElementById('clear-all').addEventListener('click', function () {
+        document.querySelectorAll('.category-checkbox').forEach(cb => {
+            cb.checked = false;
+        });
+        updateSelectedCount();
+    });
+</script>

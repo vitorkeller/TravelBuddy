@@ -16,10 +16,10 @@
 </head>
 
 <body class="bg-white text-black font-[Poppins]">
-    <%- include('componentes/header') %>
+    <%- include('components/header') %>
         <main class="mx-auto max-w-7xl py-6 px-2 ">
             <div class="relative bg-white ">
-                <%- include('componentes/Filter', { categorias: categorias }) %>
+                <%- include('components/Filter', { categorias: categorias }) %>
             </div>
             <section class="mt-12">
                 <div class="mx-auto max-w-7xl">
@@ -52,7 +52,7 @@
             </section>
             </div>
         </main>
-        <%- include('componentes/footer') %>
+        <%- include('components/footer') %>
             <script>
                 document.addEventListener('click', function (event) {
                     const details = document.querySelectorAll('details');

@@ -1,0 +1,72 @@
+<div class="fixed inset-y-0 left-0 w-64 bg-gray-100 shadow-xl z-50">
+    <div class="flex items-center justify-center px-6 py-4 bg-white shadow-sm">
+        <div class="flex items-center space-x-3">
+            <img src="/images/imgLogoSite.png" class="w-[202px] h-[40px] object-contain" alt="Logo do site">
+        </div>
+    </div>
+
+    <nav class="mt-8 px-4">
+        <div class="space-y-2">
+            <a href="/admin/Dashboard"
+                class="flex items-center px-4 py-3 font-semibold rounded-lg transition-colors group
+                    <%= paginaAtual === '/admin/Dashboard' ? 'bg-blue-100 text-blue-700' : 'text-black hover:bg-gray-700 hover:text-white' %>">
+                <i class="fas fa-home mr-3 
+                    <%= paginaAtual === '/admin/Dashboard' ? 'text-blue-600' : 'text-black group-hover:text-white' %>">
+                </i>
+                Dashboard
+            </a>
+            <a href="/admin/Usuarios"
+                class="flex items-center px-4 py-3 font-semibold rounded-lg transition-colors group
+                <%= paginaAtual === '/admin/Usuarios' ? 'bg-blue-100 text-blue-700' : 'text-black hover:bg-gray-700 hover:text-white' %>">
+                <i class="fas fa-users mr-3 
+                    <%= paginaAtual === '/admin/Usuarios' ? 'text-blue-600' : 'text-black group-hover:text-white' %>">
+                </i>
+                Usuários
+            </a>
+            <a href="/admin/Categorias"
+                class="flex items-center px-4 py-3 font-semibold rounded-lg transition-colors group
+                    <%= paginaAtual === '/admin/Categorias' ? 'bg-blue-100 text-blue-700' : 'text-black hover:bg-gray-700 hover:text-white' %>">
+                <i
+                    class="fas fa-chart-bar mr-3 
+                    <%= paginaAtual === '/admin/Categorias' ? 'text-blue-600' : 'text-black group-hover:text-white' %>">
+                </i>
+                Categorias
+            </a>
+            <a href="/admin/Publicacoes"
+                class="flex items-center px-4 py-3 font-semibold rounded-lg transition-colors group
+                    <%= paginaAtual === '/admin/Publicacoes' ? 'bg-blue-100 text-blue-700' : 'text-black hover:bg-gray-700 hover:text-white' %>">
+                <i
+                    class="fa-solid fa-images mr-3 
+                    <%= paginaAtual === '/admin/Publicacoes' ? 'text-blue-600' : 'text-black group-hover:text-white' %>">
+                </i>
+                Publicações
+            </a>
+            <a href="/admin/Locais"
+                class="flex items-center px-4 py-3 font-semibold rounded-lg transition-colors group
+                    <%= paginaAtual === '/admin/Locais' ? 'bg-blue-100 text-blue-700' : 'text-black hover:bg-gray-700 hover:text-white' %>">
+                <i
+                    class="fa-solid fa-map-location-dot mr-3 
+                    <%= paginaAtual === '/admin/Locais' ? 'text-blue-600' : 'text-black group-hover:text-white' %>"></i>
+                Locais
+            </a>
+        </div>
+    </nav>
+
+    <div class="absolute bottom-4 left-4 right-4">
+        <div class="bg-gray-800 rounded-lg p-4">
+            <div class="flex items-center place-content-evenly ">
+                <div>
+                    <p class="text-white text-sm font-medium">
+                        <%= admNome %>
+                    </p>
+                    <p class="text-gray-400 text-xs">Administrador</p>
+                </div>
+                <div>
+                    <a href="/admin/Sair">
+                        <p class="text-white text-lg font-medium hover:text-red-500">Sair</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

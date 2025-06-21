@@ -16,7 +16,7 @@
 </head>
 
 <body class="bg-white text-black font-[Poppins]">
-    <%- include('componentes/header') %>
+    <%- include('components/header') %>
         <div class="flex justify-center items-center min-h-screen max-w-7xl mx-auto px-2 py-6"">
             <form action=" /PublicarFotografia" method="POST" enctype="multipart/form-data"
             class="w-full max-w-3xl bg-white border border-gray-200 rounded-xl shadow-sm p-8 space-y-12">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <div class="sm:col-span-3">
-                        <%- include('componentes/checkbox', { categorias: categorias, publicacao: { categorias: [] }})%>
+                        <%- include('components/checkbox', { categorias: categorias, publicacao: { categorias: [] }})%>
                     </div>
                 </div>
             </div>
@@ -160,8 +160,8 @@
             </div>
             </form>
         </div>
-        <%- include('componentes/foto') %>
-            <%- include('componentes/footer') %>
+        <%- include('components/foto') %>
+            <%- include('components/footer') %>
                 <script>
                     document.addEventListener('click', function (event) {
                         const details = document.querySelectorAll('details');
