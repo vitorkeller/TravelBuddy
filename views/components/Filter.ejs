@@ -14,7 +14,8 @@
             class="absolute left-0 w-full z-50 divide-y divide-gray-300 border border-gray-300 bg-white shadow-lg rounded-b">
             <div class="flex items-center justify-between px-2 py-2">
                 <span id="selected-count" class="text-sm text-gray-700"> 0 Selecionados </span>
-                <button id="clear-all" type="button" class="text-xs text-black hover:underline ml-2"> Limpar Tudo
+                <button id="clear-all" type="button" class="text-xs text-black hover:underline">
+                    Limpar Tudo
                 </button>
             </div>
             <fieldset class="p-3">
@@ -23,10 +24,12 @@
                     <% categorias.forEach(function(categoria, idx) { %>
                         <label for="Option<%= idx %>" class="inline-flex items-center gap-3">
                             <input type="checkbox" class="size-5 rounded border-gray-300 shadow-sm category-checkbox"
-                                id="Option<%= idx %>" />
-                            <span class="text-sm font-medium text-black">
-                                <%= categoria.catNome %>
-                            </span>
+                                id="Option<%= idx %>" value="<%= categoria.catCodigo %>" <% if (typeof
+                                categoriasSelecionadas !=='undefined' &&
+                                categoriasSelecionadas.includes(categoria.catCodigo.toString())) { %>checked<% } %> />
+                                <span class="text-sm font-medium text-black">
+                                    <%= categoria.catNome %>
+                                </span>
                         </label>
                         <% }) %>
                 </div>
@@ -40,8 +43,32 @@
         const count = Array.from(checkboxes).filter(cb => cb.checked).length;
         document.getElementById('selected-count').textContent = `${count} Selecionados`;
     }
+
+    function applyFilter() {
+        const checkboxes = document.querySelectorAll('.category-checkbox:checked');
+        const selectedCategories = Array.from(checkboxes).map(cb => cb.value);
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete('categorias');
+
+        if (selectedCategories.length > 0) {
+            url.searchParams.set('categorias', selectedCategories.join(','));
+        }
+
+        window.location.href = url.toString();
+    }
+
+    function clearFilter() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('categorias');
+        window.location.href = url.toString();
+    }
+
     document.querySelectorAll('.category-checkbox').forEach(cb => {
-        cb.addEventListener('change', updateSelectedCount);
+        cb.addEventListener('change', function () {
+            updateSelectedCount();
+            applyFilter(); // Aplica o filtro automaticamente
+        });
     });
 
     document.getElementById('clear-all').addEventListener('click', function () {
@@ -49,5 +76,9 @@
             cb.checked = false;
         });
         updateSelectedCount();
+        clearFilter();
     });
+
+    // Inicializar contagem na carga da página
+    updateSelectedCount();
 </script>
