@@ -18,15 +18,15 @@
 <body class="bg-white text-black font-[Poppins]">
     <%- include('components/header') %>
         <div class="mx-auto max-w-7xl py-6 px-2">
-            <a href="javascript:history.back()">
-                <button
+            <div>
+                <button onclick="history.back()"
                     class="flex items-center text-sm text-black mb-4 border border-black rounded-3xl px-4 py-2 hover:bg-gray-100 transition">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                     Voltar
                 </button>
-            </a>
+            </div>
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="flex flex-col">
                     <div>

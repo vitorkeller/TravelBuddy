@@ -320,7 +320,6 @@ router.post('/descurtir', async function (req, res) {
     }
 });
 
-
 /* FUNCTIONS */
 function verificarLoginMySQL(res) {
     if (!global.usuarioEmail || global.usuarioEmail == '') res.redirect('/');
