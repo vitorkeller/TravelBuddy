@@ -50,18 +50,14 @@ router.get('/EsqueceuSenha', function (req, res, next) {
 router.get('/Inicial', async function (req, res, next) {
     verificarLoginMySQL(res);
     const categorias = await global.banco.buscarCategorias();
-
     let categoriasSelecionadas = [];
     if (req.query.categorias) {
         if (Array.isArray(req.query.categorias)) {
-            // Se ainda vier como array (compatibilidade)
             categoriasSelecionadas = req.query.categorias;
         } else {
-            // Se vier como string separada por vírgula
             categoriasSelecionadas = req.query.categorias.split(',').filter(cat => cat.trim() !== '');
         }
     }
-
     let publicacoes;
     if (categoriasSelecionadas.length > 0) {
         publicacoes = await global.banco.buscarPublicacoesPorCategorias(categoriasSelecionadas);
@@ -75,6 +71,29 @@ router.get('/Inicial', async function (req, res, next) {
         publicacoes,
         categoriasSelecionadas
     });
+});
+
+router.get('/api/publicacoes', async function (req, res, next) {
+    try {
+        let categoriasSelecionadas = [];
+        if (req.query.categorias) {
+            if (Array.isArray(req.query.categorias)) {
+                categoriasSelecionadas = req.query.categorias;
+            } else {
+                categoriasSelecionadas = req.query.categorias.split(',').filter(cat => cat.trim() !== '');
+            }
+        }
+        let publicacoes;
+        if (categoriasSelecionadas.length > 0) {
+            publicacoes = await global.banco.buscarPublicacoesPorCategorias(categoriasSelecionadas);
+        } else {
+            publicacoes = await global.banco.buscarPublicacoes();
+        }
+        res.json({ publicacoes });
+    } catch (error) {
+        console.error('Erro ao buscar publicações:', error);
+        res.status(500).json({ erro: 'Erro ao buscar publicações' });
+    }
 });
 
 router.get('/Privacidade', function (req, res, next) {
