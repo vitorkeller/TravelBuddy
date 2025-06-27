@@ -19,7 +19,8 @@
     <%- include('components/header') %>
         <main class="mx-auto max-w-7xl py-6 px-2 ">
             <div class="relative bg-white ">
-                <%- include('components/Filter', { categorias: categorias }) %>
+                <%- include('components/Filter', { categorias: categorias, categoriasSelecionadas:
+                    categoriasSelecionadas || [] }) %>
             </div>
             <section class="mt-12">
                 <div class="mx-auto max-w-7xl">
