@@ -139,6 +139,20 @@ async function buscarPublicacoes() {
     return publicacoes;
 }
 
+async function buscarPublicacoesPorCategorias(categorias) {
+    const conexao = await conectarBD();
+    if (!categorias || categorias.length === 0) {
+        return await buscarPublicacoes();
+    }
+    const placeholders = categorias.map(() => '?').join(',');
+    const sql = `SELECT DISTINCT p.* FROM publicacao p 
+                 INNER JOIN publicacaoCategorias pc ON p.pubCodigo = pc.pubCodigo 
+                 WHERE pc.catCodigo IN (${placeholders})
+                 ORDER BY p.pubData DESC`;
+    const [publicacoes] = await conexao.query(sql, categorias);
+    return publicacoes;
+}
+
 async function buscarPublicacaoPorUsuario(usuCodigo) {
     const conexao = await conectarBD();
     const sql = `SELECT * FROM publicacao WHERE usuCodigo=? ORDER BY pubData DESC;`;
@@ -315,4 +329,4 @@ async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubF
 
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, atualizarSenhaUsuario, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, atualizarSenhaUsuario, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, buscarPublicacoesPorCategorias, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
