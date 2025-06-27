@@ -50,8 +50,31 @@ router.get('/EsqueceuSenha', function (req, res, next) {
 router.get('/Inicial', async function (req, res, next) {
     verificarLoginMySQL(res);
     const categorias = await global.banco.buscarCategorias();
-    const publicacoes = await global.banco.buscarPublicacoes();
-    res.render('Inicial', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, categorias, publicacoes });
+
+    let categoriasSelecionadas = [];
+    if (req.query.categorias) {
+        if (Array.isArray(req.query.categorias)) {
+            // Se ainda vier como array (compatibilidade)
+            categoriasSelecionadas = req.query.categorias;
+        } else {
+            // Se vier como string separada por vírgula
+            categoriasSelecionadas = req.query.categorias.split(',').filter(cat => cat.trim() !== '');
+        }
+    }
+
+    let publicacoes;
+    if (categoriasSelecionadas.length > 0) {
+        publicacoes = await global.banco.buscarPublicacoesPorCategorias(categoriasSelecionadas);
+    } else {
+        publicacoes = await global.banco.buscarPublicacoes();
+    }
+    res.render('Inicial', {
+        titulo: 'TravelBuddy',
+        imagem: global.usuarioFoto,
+        categorias,
+        publicacoes,
+        categoriasSelecionadas
+    });
 });
 
 router.get('/Privacidade', function (req, res, next) {
