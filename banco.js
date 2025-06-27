@@ -24,20 +24,20 @@ async function buscarUsuario(usuario) {
 
 async function buscarUsuarioPorEmail(usuario) {
     const conexao = await conectarBD();
-    const sql = `SELECT * FROM usuarios WHERE usuEmail = ?`;
+    const sql = `SELECT * FROM usuarios WHERE usuEmail = ?;`;
     const [resultado] = await conexao.query(sql, [usuario.email]);
     return resultado && resultado.length > 0 ? resultado[0] : {};
 }
 
 async function atualizarSenhaUsuario(usuEmail, novaSenha) {
     const conexao = await conectarBD();
-    const sql = `UPDATE usuarios SET usuSenha=? WHERE usuEmail=?`;
+    const sql = `UPDATE usuarios SET usuSenha=? WHERE usuEmail=?;`;
     await conexao.query(sql, [novaSenha, usuEmail]);
 }
 
 async function cadastrarUsuario(usuario) {
     const conexao = await conectarBD();
-    const sql = `INSERT INTO usuarios (usuEmail, usuSenha, usuNome) VALUES (?, ?, ?)`;
+    const sql = `INSERT INTO usuarios (usuEmail, usuSenha, usuNome) VALUES (?, ?, ?);`;
     await conexao.query(sql, [usuario.email, usuario.senha, usuario.nome]);
 }
 
@@ -77,7 +77,7 @@ async function atualizarUsuarioNome(usuCodigo, nome) {
 
 async function proximoNumeroPublicacao(usuCodigo) {
     const conexao = await conectarBD();
-    const sql = `SELECT COUNT(*) AS total FROM publicacao WHERE usuCodigo = ?`;
+    const sql = `SELECT COUNT(*) AS total FROM publicacao WHERE usuCodigo = ?;`;
     const [result] = await conexao.query(sql, [usuCodigo]);
     return (result[0].total || 0) + 1;
 }
@@ -145,10 +145,7 @@ async function buscarPublicacoesPorCategorias(categorias) {
         return await buscarPublicacoes();
     }
     const placeholders = categorias.map(() => '?').join(',');
-    const sql = `SELECT DISTINCT p.* FROM publicacao p 
-                 INNER JOIN publicacaoCategorias pc ON p.pubCodigo = pc.pubCodigo 
-                 WHERE pc.catCodigo IN (${placeholders})
-                 ORDER BY p.pubData DESC`;
+    const sql = `SELECT DISTINCT p.* FROM publicacao p  INNER JOIN publicacaoCategorias pc ON p.pubCodigo = pc.pubCodigo  WHERE pc.catCodigo IN (${placeholders}) ORDER BY p.pubData DESC;`;
     const [publicacoes] = await conexao.query(sql, categorias);
     return publicacoes;
 }
@@ -293,7 +290,7 @@ async function adminExcluirPublicacao(pubCodigo) {
             }
         }
     }
-    await conexao.query(`DELETE FROM publicacao WHERE pubCodigo=?`, [pubCodigo]);
+    await conexao.query(`DELETE FROM publicacao WHERE pubCodigo=`, [pubCodigo]);
 }
 
 async function adminBuscarPais() {
@@ -312,21 +309,55 @@ async function adminBuscarPaises() {
 
 async function adminAtualizarPublicacao(pubCodigo, pubTitulo, pubDescricao, pubFoto, paisCodigo, categorias) {
     const conexao = await conectarBD();
-    const sql = `UPDATE publicacao SET pubTitulo=?, pubDescricao=?, pubFoto=?, paisCodigo=? WHERE pubCodigo=?`;
+    const sql = `UPDATE publicacao SET pubTitulo=?, pubDescricao=?, pubFoto=?, paisCodigo=? WHERE pubCodigo=?;`;
     await conexao.query(sql, [pubTitulo, pubDescricao, pubFoto, paisCodigo, pubCodigo]);
-    const sqlDel = `DELETE FROM publicacaocategorias WHERE pubCodigo=?`;
+    const sqlDel = `DELETE FROM publicacaocategorias WHERE pubCodigo=?;`;
     await conexao.query(sqlDel, [pubCodigo]);
     if (categorias && categorias.length > 0) {
         const categoriasArr = Array.isArray(categorias) ? categorias : [categorias];
         for (const catCodigo of categoriasArr) {
             await conexao.query(
-                `INSERT INTO publicacaocategorias (pubCodigo, catCodigo) VALUES (?, ?)`,
+                `INSERT INTO publicacaocategorias (pubCodigo, catCodigo) VALUES (?, ?);`,
                 [pubCodigo, catCodigo]
             );
         }
     }
 }
 
+// Funções de Curtidas
+async function curtirPublicacao(usuCodigo, pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = `INSERT INTO curtidas (usuCodigo, pubCodigo) VALUES (?, ?);`;
+    await conexao.query(sql, [usuCodigo, pubCodigo]);
+}
+
+async function descurtirPublicacao(usuCodigo, pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = `DELETE FROM curtidas WHERE usuCodigo = ? AND pubCodigo = ?;`;
+    await conexao.query(sql, [usuCodigo, pubCodigo]);
+}
+
+async function verificarCurtida(usuCodigo, pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = `SELECT * FROM curtidas WHERE usuCodigo = ? AND pubCodigo = ?;`;
+    const [resultado] = await conexao.query(sql, [usuCodigo, pubCodigo]);
+    return resultado.length > 0;
+}
+
+async function buscarCurtidasDoUsuario(usuCodigo) {
+    const conexao = await conectarBD();
+    const sql = `SELECT p.*, u.usuNome, pa.paisNome FROM curtidas c  INNER JOIN publicacao p ON c.pubCodigo = p.pubCodigo  INNER JOIN usuarios u ON p.usuCodigo = u.usuCodigo INNER JOIN pais pa ON p.paisCodigo = pa.paisCodigo WHERE c.usuCodigo = ?;`;
+    const [curtidas] = await conexao.query(sql, [usuCodigo]);
+    return curtidas;
+}
+
+async function contarCurtidas(pubCodigo) {
+    const conexao = await conectarBD();
+    const sql = `SELECT COUNT(*) as total FROM curtidas WHERE pubCodigo = ?;`;
+    const [resultado] = await conexao.query(sql, [pubCodigo]);
+    return resultado[0].total;
+}
+
 conectarBD();
 
-module.exports = { buscarUsuario, buscarUsuarioPorEmail, atualizarSenhaUsuario, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, buscarPublicacoesPorCategorias, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao };
+module.exports = { buscarUsuario, buscarUsuarioPorEmail, atualizarSenhaUsuario, cadastrarUsuario, buscarInteresses, buscarDescricao, buscarLocalizacao, buscarPerfilCompleto, atualizarUsuarioNome, atualizarFoto, atualizarPerfilSomente, atualizarPerfil, buscarAdmin, buscarCategorias, buscarPaises, proximoNumeroPublicacao, publicarFotografia, vincularCategoriaPublicacao, buscarPublicacaoPorUsuario, buscarPublicacaoPorId, buscarPublicacoes, buscarPublicacoesPorCategorias, adminBuscarCategorias, adminBuscarCategoria, adminBuscarCategoriaPorCodigo, adminExcluirCategoria, adminInserirCategoria, adminAtualizarCategoria, adminBuscarUsuarios, adminBuscarUsuarioPorCodigo, adminExcluirUsuario, adminBuscarUsuarioPorEmail, adminInserirUsuario, adminAtualizarUsuario, adminBuscarPublicacoes, adminBuscarPublicacaoPorCodigo, adminExcluirPublicacao, adminBuscarPais, adminBuscarPaises, adminAtualizarPublicacao, curtirPublicacao, descurtirPublicacao, verificarCurtida, buscarCurtidasDoUsuario, contarCurtidas };

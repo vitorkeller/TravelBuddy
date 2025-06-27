@@ -63,6 +63,11 @@
                         <h1 class="text-4xl font-bold mb-6">
                             <%= publicacao.pubTitulo %>
                         </h1>
+                        <button id="like-btn" class="ml-4 flex items-center group" aria-label="Curtir">
+                            <i id="like-icon"
+                                class="fa-heart fa-2x transition-colors duration-200 fa-regular text-gray-400 group-hover:text-red-500"></i>
+                            <span id="like-count" class="ml-2 text-lg font-semibold text-gray-700">0</span>
+                        </button>
                     </div>
                     <p class="text-justify text-base leading-relaxed">
                         <%= publicacao.pubDescricao %>
@@ -84,3 +89,55 @@
 </body>
 
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pubCodigo = '<%= publicacao.pubCodigo %>';
+        const likeBtn = document.getElementById('like-btn');
+        const likeIcon = document.getElementById('like-icon');
+        const likeCount = document.getElementById('like-count');
+        function atualizarLikeUI(curtiu, total) {
+            if (curtiu) {
+                likeIcon.classList.remove('fa-regular', 'text-gray-400');
+                likeIcon.classList.add('fa-solid', 'text-red-500');
+            } else {
+                likeIcon.classList.remove('fa-solid', 'text-red-500');
+                likeIcon.classList.add('fa-regular', 'text-gray-400');
+            }
+            likeCount.textContent = total;
+        }
+        function verificarCurtida() {
+            fetch(`/verificar-curtida?pubCodigo=${pubCodigo}`)
+                .then(res => res.json())
+                .then(data => {
+                    buscarContagem(data.curtiu);
+                });
+        }
+        function buscarContagem(curtiuAtual) {
+            fetch(`/contar-curtidas/${pubCodigo}`)
+                .then(res => res.json())
+                .then(data => {
+                    atualizarLikeUI(curtiuAtual, data.total);
+                });
+        }
+        likeBtn.addEventListener('click', function () {
+            fetch(`/verificar-curtida?pubCodigo=${pubCodigo}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.curtiu) {
+                        fetch('/descurtir', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ pubCodigo })
+                        }).then(() => verificarCurtida());
+                    } else {
+                        fetch('/curtir', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ pubCodigo })
+                        }).then(() => verificarCurtida());
+                    }
+                });
+        });
+        verificarCurtida();
+    });
+</script>

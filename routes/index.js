@@ -123,9 +123,14 @@ router.get('/Imagem/:id', async function (req, res) {
     res.render('Imagem', { titulo: 'TravelBuddy', imagem: global.usuarioFoto, publicacao });
 });
 
-router.get('/Curtidas', function (req, res, next) {
+router.get('/Curtidas', async function (req, res, next) {
     verificarLoginMySQL(res);
-    res.render('Curtidas', { titulo: 'TravelBuddy', imagem: global.usuarioFoto });
+    const curtidas = await global.banco.buscarCurtidasDoUsuario(global.usuarioCodigo);
+    res.render('Curtidas', {
+        titulo: 'TravelBuddy',
+        imagem: global.usuarioFoto,
+        curtidas
+    });
 });
 
 router.get('/Perfil', async function (req, res, next) {
@@ -153,6 +158,29 @@ router.get('/sair', function (req, res, next) {
     delete global.usuarioEmail;
     delete global.usuarioSenha;
     res.redirect('/');
+});
+
+router.get('/verificar-curtida', async function (req, res) {
+    try {
+        const usuCodigo = global.usuarioCodigo;
+        const pubCodigo = req.query.pubCodigo;
+        if (!usuCodigo || !pubCodigo) return res.status(400).json({ erro: 'Dados insuficientes.' });
+        const curtiu = await global.banco.verificarCurtida(usuCodigo, pubCodigo);
+        res.json({ curtiu });
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao verificar curtida.' });
+    }
+});
+
+router.get('/contar-curtidas/:pubCodigo', async function (req, res) {
+    try {
+        const pubCodigo = req.params.pubCodigo;
+        if (!pubCodigo) return res.status(400).json({ erro: 'Dados insuficientes.' });
+        const total = await global.banco.contarCurtidas(pubCodigo);
+        res.json({ total });
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao contar curtidas.' });
+    }
 });
 
 /* POST Pages. */
@@ -267,6 +295,31 @@ router.post('/PublicarFotografia', uploadPublicacao.single('pubFoto'), async fun
         res.status(500).send('Erro ao publicar fotografia.');
     }
 });
+
+router.post('/curtir', async function (req, res) {
+    try {
+        const usuCodigo = global.usuarioCodigo;
+        const { pubCodigo } = req.body;
+        if (!usuCodigo || !pubCodigo) return res.status(400).json({ erro: 'Dados insuficientes.' });
+        await global.banco.curtirPublicacao(usuCodigo, pubCodigo);
+        res.json({ sucesso: true });
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao curtir publicação.' });
+    }
+});
+
+router.post('/descurtir', async function (req, res) {
+    try {
+        const usuCodigo = global.usuarioCodigo;
+        const { pubCodigo } = req.body;
+        if (!usuCodigo || !pubCodigo) return res.status(400).json({ erro: 'Dados insuficientes.' });
+        await global.banco.descurtirPublicacao(usuCodigo, pubCodigo);
+        res.json({ sucesso: true });
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao descurtir publicação.' });
+    }
+});
+
 
 /* FUNCTIONS */
 function verificarLoginMySQL(res) {
