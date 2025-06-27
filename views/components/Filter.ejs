@@ -47,30 +47,93 @@
     function applyFilter() {
         const checkboxes = document.querySelectorAll('.category-checkbox:checked');
         const selectedCategories = Array.from(checkboxes).map(cb => cb.value);
-
         const url = new URL(window.location.href);
         url.searchParams.delete('categorias');
 
         if (selectedCategories.length > 0) {
             url.searchParams.set('categorias', selectedCategories.join(','));
         }
-
-        window.location.href = url.toString();
+        window.history.pushState({}, '', url.toString());
+        fetchPublicacoes(selectedCategories);
     }
-
+    function fetchPublicacoes(categorias) {
+        const publicacoesContainer = document.querySelector('.publicacoes-container');
+        if (publicacoesContainer) {
+            publicacoesContainer.classList.add('loading');
+        }
+        const params = new URLSearchParams();
+        if (categorias.length > 0) {
+            params.set('categorias', categorias.join(','));
+        }
+        setTimeout(() => {
+            fetch(`/api/publicacoes?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(() => {
+                        renderPublicacoes(data.publicacoes);
+                        if (publicacoesContainer) {
+                            publicacoesContainer.classList.remove('loading');
+                        }
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar publicações:', error);
+                    if (publicacoesContainer) {
+                        publicacoesContainer.classList.remove('loading');
+                    }
+                });
+        }, 100);
+    }
+    function renderPublicacoes(publicacoes) {
+        const container = document.querySelector('.publicacoes-container');
+        if (!container) return;
+        if (!publicacoes || publicacoes.length === 0) {
+            container.innerHTML = '<div class="col-span-4 text-center text-gray-600 py-10">Nenhuma publicação encontrada.</div>';
+            return;
+        }
+        const colunas = [[], [], [], []];
+        publicacoes.forEach((pub, idx) => {
+            colunas[idx % 4].push(pub);
+        });
+        const htmlColunas = colunas.map(col => {
+            const htmlPublicacoes = col.map(pub => `
+                <div class="group relative publicacao-item">
+                    <a href="/Imagem/${pub.pubCodigo}">
+                        <img src="/uploads/Publicações/${pub.pubFoto}" loading="lazy"
+                             alt="${pub.pubTitulo}"
+                             class="w-full max-w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75 h-auto block">
+                    </a>
+                </div>
+            `).join('');
+            return `<div class="flex flex-col gap-y-4">${htmlPublicacoes}</div>`;
+        }).join('');
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+            container.innerHTML = htmlColunas;
+            container.classList.add('fade-in');
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                container.classList.remove('fade-in');
+            }, 800);
+        }, 200);
+    }
     function clearFilter() {
         const url = new URL(window.location.href);
         url.searchParams.delete('categorias');
-        window.location.href = url.toString();
+        window.history.pushState({}, '', url.toString());
+        fetchPublicacoes([]);
     }
-
     document.querySelectorAll('.category-checkbox').forEach(cb => {
         cb.addEventListener('change', function () {
             updateSelectedCount();
-            applyFilter(); // Aplica o filtro automaticamente
+            clearTimeout(window.filterTimeout);
+            window.filterTimeout = setTimeout(() => {
+                applyFilter();
+            }, 100);
         });
     });
-
     document.getElementById('clear-all').addEventListener('click', function () {
         document.querySelectorAll('.category-checkbox').forEach(cb => {
             cb.checked = false;
@@ -78,7 +141,5 @@
         updateSelectedCount();
         clearFilter();
     });
-
-    // Inicializar contagem na carga da página
     updateSelectedCount();
 </script>
